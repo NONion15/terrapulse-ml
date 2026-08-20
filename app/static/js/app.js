@@ -77,7 +77,11 @@ function setScope(scope) {
     }
 
     // Trigger calculation for new scope
-    handleCalcChange();
+    if (scope === 'ames') {
+        handleNeighborhoodDropdownChange();
+    } else {
+        handleCityDropdownChange();
+    }
 }
 
 // ============================================================
@@ -238,7 +242,9 @@ function selectHouseDot(house) {
     highlightMapPin(house.lat, house.lng);
     populateInspector(selectedProperty);
     openInspector();
-    triggerInspectorPrediction(selectedProperty);
+    
+    // For specific existing houses, immediately run prediction
+    runInspectorPrediction();
 }
 
 function selectGlobalCityDot(country, city, coords) {
@@ -263,10 +269,11 @@ function selectGlobalCityDot(country, city, coords) {
     highlightMapPin(coords[0], coords[1]);
     populateInspector(selectedProperty);
     openInspector();
-    triggerInspectorPrediction(selectedProperty);
+    runInspectorPrediction();
 }
 
 // Dynamic Spatial Feature Estimation on Map Clicks
+// Generates probable neighborhood data, fills unedited fields with averages, and awaits calculation
 function handleMapBackgroundClick(e) {
     const lat = e.latlng.lat;
     const lng = e.latlng.lng;
@@ -295,6 +302,11 @@ function handleMapBackgroundClick(e) {
                 HeatingQC: defaults.HeatingQC || 'Ex'
             }
         };
+
+        highlightMapPin(lat, lng);
+        populateInspector(selectedProperty);
+        setInspectorPendingState(resolvedNeigh);
+        openInspector();
     } else {
         selectedProperty = {
             isGlobal: true,
@@ -310,12 +322,12 @@ function handleMapBackgroundClick(e) {
                 constructed_year: 2010
             }
         };
-    }
 
-    highlightMapPin(lat, lng);
-    populateInspector(selectedProperty);
-    openInspector();
-    triggerInspectorPrediction(selectedProperty);
+        highlightMapPin(lat, lng);
+        populateInspector(selectedProperty);
+        setInspectorPendingState('San Francisco');
+        openInspector();
+    }
 }
 
 // Point-in-Polygon & Centroid Distance Resolver
@@ -403,10 +415,45 @@ function initCalculatorDropdowns() {
     }
 }
 
+// When user changes neighborhood dropdown, load that neighborhood's probable defaults into the form
+function handleNeighborhoodDropdownChange() {
+    const neigh = document.getElementById('calc-Neighborhood')?.value || 'CollgCr';
+    const defaults = NEIGHBORHOOD_DEFAULTS?.[neigh] || {};
+
+    // Auto-fill fields with neighborhood average data
+    if (defaults.OverallQual) document.getElementById('calc-OverallQual').value = Math.round(defaults.OverallQual);
+    if (defaults.GrLivArea) document.getElementById('calc-GrLivArea').value = Math.round(defaults.GrLivArea);
+    if (defaults.YearBuilt) document.getElementById('calc-YearBuilt').value = Math.round(defaults.YearBuilt);
+    if (defaults.TotalBsmtSF) document.getElementById('calc-TotalBsmtSF').value = Math.round(defaults.TotalBsmtSF);
+    if (defaults.BedroomAbvGr) document.getElementById('calc-BedroomAbvGr').value = Math.round(defaults.BedroomAbvGr);
+    if (defaults.FullBath) document.getElementById('calc-FullBath').value = Math.round(defaults.FullBath);
+    if (defaults.GarageCars) document.getElementById('calc-GarageCars').value = Math.round(defaults.GarageCars);
+    if (defaults.LotArea) document.getElementById('calc-LotArea').value = Math.round(defaults.LotArea);
+    if (defaults.KitchenQual) document.getElementById('calc-KitchenQual').value = defaults.KitchenQual;
+    if (defaults.Fireplaces) document.getElementById('calc-Fireplaces').value = Math.round(defaults.Fireplaces);
+    if (defaults.YearRemodAdd) document.getElementById('calc-YearRemodAdd').value = Math.round(defaults.YearRemodAdd);
+
+    updateMarketContextBanner();
+    runCalcPrediction();
+}
+
+function handleCityDropdownChange() {
+    const cityOption = document.getElementById('calc-city')?.selectedOptions[0];
+    const country = cityOption?.dataset?.country || 'Germany';
+    const defaults = GLOBAL_DEFAULTS?.[country] || {};
+
+    if (defaults.property_size_sqft) document.getElementById('calc-GrLivArea').value = Math.round(defaults.property_size_sqft);
+    if (defaults.rooms) document.getElementById('calc-BedroomAbvGr').value = Math.round(defaults.rooms);
+    if (defaults.bathrooms) document.getElementById('calc-FullBath').value = Math.round(defaults.bathrooms);
+    if (defaults.constructed_year) document.getElementById('calc-YearBuilt').value = Math.round(defaults.constructed_year);
+
+    runCalcPrediction();
+}
+
 function handleCalcChange() {
     updateMarketContextBanner();
     clearTimeout(calcDebounceTimer);
-    calcDebounceTimer = setTimeout(runCalcPrediction, 80);
+    calcDebounceTimer = setTimeout(runCalcPrediction, 100);
 }
 
 function updateMarketContextBanner() {
@@ -421,6 +468,7 @@ function updateMarketContextBanner() {
     }
 }
 
+// Executes the machine learning model via backend inference
 async function runCalcPrediction() {
     const isGlobal = currentScope === 'global';
     const qual = Number(document.getElementById('calc-OverallQual')?.value || 7);
@@ -692,6 +740,21 @@ function closeInspector() {
     activeMarkerLayerGroup.clearLayers();
 }
 
+// Sets the pending state when an area is selected before running prediction
+function setInspectorPendingState(locationName) {
+    document.getElementById('insp-price').textContent = 'Pending Calculation';
+    document.getElementById('insp-sqft-rate').textContent = `Specs loaded for ${getNeighborhoodFullName(locationName)}. Adjust and click Run.`;
+    document.getElementById('insp-trend-pill').style.display = 'none';
+    document.getElementById('insp-status-pill').textContent = 'Features Estimated';
+    document.getElementById('insp-status-pill').style.background = 'rgba(79, 143, 247, 0.15)';
+    document.getElementById('insp-status-pill').style.color = 'var(--primary)';
+
+    const attrContainer = document.getElementById('insp-attribution-list');
+    if (attrContainer) {
+        attrContainer.innerHTML = `<div class="attr-row" style="color: var(--text-muted); font-size: 11px;">Click 'Run Valuation Model' to calculate feature attributions.</div>`;
+    }
+}
+
 function populateInspector(prop) {
     const locText = prop.isGlobal ? `${prop.city}, ${prop.country}` : `${getNeighborhoodFullName(prop.neighborhood)}, Ames, IA`;
     document.getElementById('insp-location').textContent = locText;
@@ -729,41 +792,61 @@ function handleInspectorInput() {
 
     clearTimeout(inspDebounceTimer);
     inspDebounceTimer = setTimeout(() => {
-        triggerInspectorPrediction(selectedProperty);
-    }, 80);
+        runInspectorPrediction();
+    }, 100);
 }
 
-async function triggerInspectorPrediction(property) {
-    const endpoint = property.isGlobal ? '/api/predict/global' : '/api/predict';
+// Runs the ML prediction for the property currently in the inspector
+async function runInspectorPrediction() {
+    if (!selectedProperty) return;
+
+    // Collect updated specs
+    selectedProperty.features.OverallQual = Number(document.getElementById('insp-OverallQual')?.value || 7);
+    selectedProperty.features.GrLivArea = Number(document.getElementById('insp-GrLivArea')?.value || 1800);
+    selectedProperty.features.YearBuilt = Number(document.getElementById('insp-YearBuilt')?.value || 2005);
+    selectedProperty.features.BedroomAbvGr = Number(document.getElementById('insp-BedroomAbvGr')?.value || 3);
+    selectedProperty.features.FullBath = Number(document.getElementById('insp-FullBath')?.value || 2);
+    selectedProperty.features.GarageCars = Number(document.getElementById('insp-GarageCars')?.value || 2);
+    selectedProperty.features.TotalBsmtSF = Number(document.getElementById('insp-TotalBsmtSF')?.value || 950);
+    selectedProperty.features.KitchenQual = document.getElementById('insp-KitchenQual')?.value || 'Gd';
+    selectedProperty.features.Fireplaces = Number(document.getElementById('insp-Fireplaces')?.value || 1);
+
+    const endpoint = selectedProperty.isGlobal ? '/api/predict/global' : '/api/predict';
 
     try {
         const response = await fetch(endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(property.features),
+            body: JSON.stringify(selectedProperty.features),
         });
         if (!response.ok) return;
 
         const result = await response.json();
-        property.prediction = result.predicted_price;
-        property.attribution = result.attribution;
-        property.confidence_lower = result.confidence_lower;
-        property.confidence_upper = result.confidence_upper;
-        property.model_name = result.model;
-        property.holdout_r2 = result.holdout_r2;
+        selectedProperty.price = result.predicted_price;
+        selectedProperty.prediction = result.predicted_price;
+        selectedProperty.attribution = result.attribution;
+        selectedProperty.confidence_lower = result.confidence_lower;
+        selectedProperty.confidence_upper = result.confidence_upper;
+        selectedProperty.model_name = result.model;
+        selectedProperty.holdout_r2 = result.holdout_r2;
 
         const price = Math.round(result.predicted_price || 0);
         document.getElementById('insp-price').textContent = `$${price.toLocaleString()}`;
 
-        const sqft = Number(property.features.GrLivArea || property.features.property_size_sqft || 1800);
+        const sqft = Number(selectedProperty.features.GrLivArea || selectedProperty.features.property_size_sqft || 1800);
         const pricePerSqFt = sqft > 0 ? Math.round(price / sqft) : 0;
         document.getElementById('insp-sqft-rate').textContent = `$${pricePerSqFt} / sqft`;
 
         const median = result.neighborhood_median || result.location_median || price;
         const diffPct = ((price - median) / (median || 1)) * 100;
         const trendEl = document.getElementById('insp-trend-pill');
+        trendEl.style.display = 'inline-block';
         trendEl.className = diffPct >= 0 ? 'trend-pill positive' : 'trend-pill negative';
         trendEl.textContent = `${diffPct >= 0 ? '+' : ''}${diffPct.toFixed(1)}% vs Med`;
+
+        document.getElementById('insp-status-pill').textContent = 'Valuation Calculated';
+        document.getElementById('insp-status-pill').style.background = 'rgba(16, 185, 129, 0.15)';
+        document.getElementById('insp-status-pill').style.color = 'var(--accent-emerald)';
 
         renderAttributionList('insp-attribution-list', result.attribution);
     } catch (err) {
@@ -799,7 +882,7 @@ function openAppraisalFromInspector() {
 function openAppraisalModal() {
     const prop = selectedProperty;
     if (!prop) {
-        alert('Please specify property parameters first.');
+        alert('Please run a property valuation first.');
         return;
     }
 
@@ -1075,5 +1158,5 @@ function formatPrice(price) {
 document.addEventListener('DOMContentLoaded', () => {
     initCalculatorDropdowns();
     initMap();
-    handleCalcChange();
+    handleNeighborhoodDropdownChange();
 });
