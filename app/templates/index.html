@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ames Home Prediction Project · Intelligent Real Estate Valuation</title>
+    <title>Ames Home Prediction Project - Real Estate Machine Learning</title>
     
     <!-- Leaflet & Map Tiles -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -19,7 +19,7 @@
 </head>
 <body>
     <div id="app">
-        <!-- Top Clean Navigation Bar -->
+        <!-- Top Navigation Bar -->
         <header id="header">
             <div class="header-brand" onclick="switchSection('calculator')">
                 <div class="brand-logo">
@@ -44,7 +44,7 @@
                         <line x1="16" y1="14" x2="16" y2="18"></line>
                         <path d="M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M8 18h.01M12 18h.01"></path>
                     </svg>
-                    <span>⚡ Quick Predictor</span>
+                    <span>Quick Predictor</span>
                 </button>
                 <button class="nav-tab" data-section="map" onclick="switchSection('map')">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -52,14 +52,14 @@
                         <line x1="8" y1="2" x2="8" y2="18"></line>
                         <line x1="16" y1="6" x2="16" y2="22"></line>
                     </svg>
-                    <span>🗺️ Map Explorer</span>
+                    <span>Map Explorer</span>
                 </button>
                 <button class="nav-tab" data-section="docs" onclick="switchSection('docs')">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                         <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
                     </svg>
-                    <span>📖 Machine Learning Guide</span>
+                    <span>Model Documentation</span>
                 </button>
             </nav>
 
@@ -72,7 +72,7 @@
                     </button>
                     <button id="btn-scope-global" class="scope-btn" onclick="setScope('global')" title="40 Global Metropolitan Hubs">
                         <span>Global 40-City</span>
-                        <span class="scope-pill global">RF 99.9%</span>
+                        <span class="scope-pill global">Random Forest 99.9%</span>
                     </button>
                 </div>
             </div>
@@ -82,21 +82,21 @@
         <main id="main-content">
             
             <!-- ============================================================
-                 SECTION 1: ⚡ Number-Only Clean Predictor
+                 SECTION 1: Quick Predictor (Calculator)
                  ============================================================ -->
             <section id="section-calculator" class="app-section active">
                 <div class="section-container">
                     <div class="section-header-compact">
                         <div>
-                            <h2>Real Estate Price Predictor</h2>
-                            <p>Adjust property specifications below for immediate machine learning valuation estimation.</p>
+                            <h2>Property Valuation Calculator</h2>
+                            <p>Adjust property specifications below to calculate estimated market valuations using machine learning models.</p>
                         </div>
                         <div class="archetype-chips">
                             <span class="chip-label">Presets:</span>
-                            <button class="preset-chip" onclick="applyPresetToActive('luxury')">🏰 Luxury Estate</button>
-                            <button class="preset-chip" onclick="applyPresetToActive('family')">🏡 Suburban Family</button>
-                            <button class="preset-chip" onclick="applyPresetToActive('starter')">🏢 Starter Home</button>
-                            <button class="preset-chip" onclick="applyPresetToActive('fixer')">🛠️ Value-Add</button>
+                            <button class="preset-chip" onclick="applyPresetToActive('luxury')">Luxury Estate</button>
+                            <button class="preset-chip" onclick="applyPresetToActive('family')">Suburban Family</button>
+                            <button class="preset-chip" onclick="applyPresetToActive('starter')">Starter Home</button>
+                            <button class="preset-chip" onclick="applyPresetToActive('fixer')">Value-Add</button>
                         </div>
                     </div>
 
@@ -116,7 +116,7 @@
                                         <select id="calc-city" class="form-select" onchange="handleCalcChange()"></select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="calc-YearBuilt">Construction Vintage (Year)</label>
+                                        <label for="calc-YearBuilt">Year Built</label>
                                         <input type="number" id="calc-YearBuilt" class="form-input" value="2005" min="1900" max="2026" oninput="handleCalcChange()">
                                     </div>
                                 </div>
@@ -124,21 +124,21 @@
                                 <!-- Neighborhood Market Context Card -->
                                 <div id="calc-market-context" class="market-context-card">
                                     <div class="market-context-title">
-                                        <span>🏘️ Neighborhood Market Context</span>
+                                        <span>Neighborhood Market Context</span>
                                         <strong id="market-neigh-name">College Creek</strong>
                                     </div>
                                     <div class="market-context-grid">
                                         <div><span class="m-lbl">Median Price:</span> <strong id="market-median">$197,200</strong></div>
-                                        <div><span class="m-lbl">Price Range:</span> <strong id="market-range">$110K – $425K</strong></div>
-                                        <div><span class="m-lbl">Sample Size:</span> <strong id="market-count">150 Homes</strong></div>
+                                        <div><span class="m-lbl">Price Range:</span> <strong id="market-range">$110K - $425K</strong></div>
+                                        <div><span class="m-lbl">Sample Count:</span> <strong id="market-count">150 Homes</strong></div>
                                     </div>
                                 </div>
 
                                 <!-- Quality Slider -->
                                 <div class="form-group">
                                     <div class="label-with-badge">
-                                        <label for="calc-OverallQual">Material & Finish Quality Rating</label>
-                                        <span id="calc-qual-badge" class="badge-accent">7 · Good Quality</span>
+                                        <label for="calc-OverallQual">Overall Material and Finish Quality</label>
+                                        <span id="calc-qual-badge" class="badge-accent">7 - Good Quality</span>
                                     </div>
                                     <input type="range" id="calc-OverallQual" min="1" max="10" value="7" class="slider" oninput="handleCalcChange()">
                                     <div class="slider-ticks">
@@ -156,7 +156,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="calc-TotalBsmtSF">Basement Area</label>
+                                        <label for="calc-TotalBsmtSF">Total Basement Area</label>
                                         <div class="input-with-suffix">
                                             <input type="number" id="calc-TotalBsmtSF" class="form-input" value="950" min="0" max="4000" step="25" oninput="handleCalcChange()">
                                             <span class="input-suffix">sqft</span>
@@ -178,7 +178,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="calc-FullBath">Bathrooms</label>
+                                        <label for="calc-FullBath">Full Bathrooms</label>
                                         <select id="calc-FullBath" class="form-select" onchange="handleCalcChange()">
                                             <option value="1">1 Bath</option>
                                             <option value="2" selected>2 Baths</option>
@@ -208,22 +208,21 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="calc-KitchenQual">Kitchen Finish Grade</label>
+                                        <label for="calc-KitchenQual">Kitchen Quality Grade</label>
                                         <select id="calc-KitchenQual" class="form-select" onchange="handleCalcChange()">
-                                            <option value="Ex">Ex (Chef / Luxury Custom)</option>
+                                            <option value="Ex">Ex (Custom Chef Grade)</option>
                                             <option value="Gd" selected>Gd (Modern Upgraded)</option>
-                                            <option value="TA">TA (Standard / Typical)</option>
-                                            <option value="Fa">Fa (Fair / Original)</option>
+                                            <option value="TA">TA (Standard Typical)</option>
+                                            <option value="Fa">Fa (Fair Original)</option>
                                         </select>
                                     </div>
                                 </div>
 
-                                <!-- ✨ Expandable Advanced Architectural Specs Drawer -->
+                                <!-- Advanced Architectural Specs Drawer -->
                                 <details class="advanced-specs-drawer">
                                     <summary class="advanced-specs-summary">
                                         <span class="summary-left">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-                                            <strong>✨ Advanced Architectural Specs</strong>
+                                            <strong>Advanced Architectural Specifications</strong>
                                         </span>
                                         <span class="summary-hint">Click to expand</span>
                                     </summary>
@@ -257,7 +256,7 @@
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label for="calc-YearRemodAdd">Remodel / Renovation Year</label>
+                                                <label for="calc-YearRemodAdd">Remodel or Renovation Year</label>
                                                 <input type="number" id="calc-YearRemodAdd" class="form-input" value="2010" min="1950" max="2026" oninput="handleCalcChange()">
                                             </div>
                                         </div>
@@ -270,9 +269,9 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="calc-HeatingQC">Heating & Climate Quality</label>
+                                                <label for="calc-HeatingQC">Heating and Climate Control Quality</label>
                                                 <select id="calc-HeatingQC" class="form-select" onchange="handleCalcChange()">
-                                                    <option value="Ex" selected>Ex (Excellent / Modern HVAC)</option>
+                                                    <option value="Ex" selected>Ex (Excellent Efficiency)</option>
                                                     <option value="Gd">Gd (Good Efficiency)</option>
                                                     <option value="TA">TA (Standard Heating)</option>
                                                 </select>
@@ -283,11 +282,11 @@
                             </form>
                         </div>
 
-                        <!-- Right Live Hero Valuation Card -->
+                        <!-- Right Valuation Card -->
                         <div class="calc-card valuation-card">
                             <div class="val-card-top">
-                                <span class="val-caption">ESTIMATED MARKET VALUATION</span>
-                                <span id="calc-model-badge" class="model-tag">CatBoost Machine Learning Model</span>
+                                <span class="val-caption">ESTIMATED MARKET VALUE</span>
+                                <span id="calc-model-badge" class="model-tag">CatBoost Regressor</span>
                             </div>
 
                             <div class="val-main-price-row">
@@ -296,7 +295,7 @@
                             </div>
 
                             <div class="val-meta-row">
-                                <span id="calc-location-label">College Creek · Ames, IA</span>
+                                <span id="calc-location-label">College Creek, Ames, IA</span>
                                 <span id="calc-sqft-rate" class="sqft-badge">$0 / sqft</span>
                             </div>
 
@@ -317,60 +316,60 @@
                             <div class="val-fin-grid">
                                 <div class="val-fin-item">
                                     <span class="v-fin-label">95% Confidence Interval</span>
-                                    <strong id="calc-conf-interval">$0 – $0</strong>
+                                    <strong id="calc-conf-interval">$0 - $0</strong>
                                 </div>
                                 <div class="val-fin-item">
-                                    <span class="v-fin-label">Est. Mortgage (30Y Fixed)</span>
+                                    <span class="v-fin-label">Estimated 30Y Mortgage</span>
                                     <strong id="calc-est-mortgage">$0/mo</strong>
                                 </div>
                                 <div class="val-fin-item">
-                                    <span class="v-fin-label">Down Payment (20%)</span>
+                                    <span class="v-fin-label">20% Down Payment</span>
                                     <strong id="calc-est-down">$0</strong>
                                 </div>
                                 <div class="val-fin-item">
-                                    <span class="v-fin-label">Est. Monthly Rental Yield</span>
+                                    <span class="v-fin-label">Estimated Monthly Rent</span>
                                     <strong id="calc-est-rent" class="highlight-emerald">$0/mo</strong>
                                 </div>
                             </div>
 
-                            <!-- Value Waterfall Decomposition -->
+                            <!-- Value Attribution List -->
                             <div class="val-attribution-box">
                                 <div class="attr-header">Value Attribution Breakdown</div>
                                 <div id="calc-attribution-list" class="attr-list">
-                                    <!-- Dynamic rows -->
+                                    <!-- Populated dynamically -->
                                 </div>
                             </div>
 
-                            <!-- 🤖 5-Model Consensus Agreement Card -->
+                            <!-- Multi-Model Consensus Card -->
                             <div class="consensus-box">
                                 <div class="consensus-header">
-                                    <span>🤖 5-Model Consensus Agreement</span>
+                                    <span>Model Consensus Comparison</span>
                                     <span id="consensus-spread-badge" class="badge-accent">High Agreement</span>
                                 </div>
                                 <div id="consensus-bars-list" class="consensus-bars">
-                                    <!-- Populated dynamically by JS -->
+                                    <!-- Populated dynamically -->
                                 </div>
                             </div>
 
-                            <!-- 💼 10-Year ROI & Equity Forecast Drawer -->
+                            <!-- 10-Year ROI Forecast Drawer -->
                             <details class="roi-drawer">
                                 <summary class="roi-summary">
-                                    <span>💼 10-Year Investment & Equity Forecast</span>
+                                    <span>Investment and 10-Year Equity Forecast</span>
                                     <span class="summary-hint">View projections</span>
                                 </summary>
                                 <div class="roi-content">
                                     <div class="form-group" style="margin-top: 8px;">
                                         <div class="label-with-badge">
-                                            <label for="calc-appreciation-rate">Annual Market Growth Rate</label>
+                                            <label for="calc-appreciation-rate">Annual Appreciation Assumption</label>
                                             <span id="calc-apprec-badge" class="badge-accent">4.5% / year</span>
                                         </div>
                                         <input type="range" id="calc-appreciation-rate" min="1" max="10" step="0.5" value="4.5" class="slider" oninput="updateROICalculation()">
                                     </div>
                                     <div class="roi-stats-grid">
-                                        <div><span class="m-lbl">5-Year Est. Value:</span> <strong id="roi-5yr" class="highlight-emerald">$0</strong></div>
-                                        <div><span class="m-lbl">10-Year Est. Value:</span> <strong id="roi-10yr" class="highlight-emerald">$0</strong></div>
-                                        <div><span class="m-lbl">10-Yr Total Equity Gain:</span> <strong id="roi-equity">$0</strong></div>
-                                        <div><span class="m-lbl">Estimated Gross Cap Rate:</span> <strong id="roi-caprate">8.9%</strong></div>
+                                        <div><span class="m-lbl">5-Year Projected Value:</span> <strong id="roi-5yr" class="highlight-emerald">$0</strong></div>
+                                        <div><span class="m-lbl">10-Year Projected Value:</span> <strong id="roi-10yr" class="highlight-emerald">$0</strong></div>
+                                        <div><span class="m-lbl">10-Year Equity Growth:</span> <strong id="roi-equity">$0</strong></div>
+                                        <div><span class="m-lbl">Estimated Gross Yield:</span> <strong id="roi-caprate">8.9%</strong></div>
                                     </div>
                                 </div>
                             </details>
@@ -400,7 +399,7 @@
 
 
             <!-- ============================================================
-                 SECTION 2: 🗺️ Map-Based Selection & Dot Explorer
+                 SECTION 2: Geospatial Map Explorer
                  ============================================================ -->
             <section id="section-map" class="app-section">
                 <div class="map-layout">
@@ -409,7 +408,7 @@
                     <div id="map-container">
                         <div id="map"></div>
 
-                        <!-- Top Floating Controls (Search + Basemap Switcher) -->
+                        <!-- Top Floating Controls -->
                         <div class="map-top-bar">
                             <div class="map-search-box">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -436,30 +435,29 @@
                         <div id="map-legend" class="map-dot-legend">
                             <div class="legend-title">Ames Valuation Tiers (1,460 Dots)</div>
                             <div class="legend-items">
-                                <div class="legend-dot-item"><span class="color-dot tier-1"></span><span>< $140K (Value Tier)</span></div>
-                                <div class="legend-dot-item"><span class="color-dot tier-2"></span><span>$140K – $190K (Starter)</span></div>
-                                <div class="legend-dot-item"><span class="color-dot tier-3"></span><span>$190K – $250K (Mid-Market)</span></div>
-                                <div class="legend-dot-item"><span class="color-dot tier-4"></span><span>$250K – $330K (Upper Tier)</span></div>
-                                <div class="legend-dot-item"><span class="color-dot tier-5"></span><span>> $330K (Luxury Tier)</span></div>
+                                <div class="legend-dot-item"><span class="color-dot tier-1"></span><span>Under $140K (Value Tier)</span></div>
+                                <div class="legend-dot-item"><span class="color-dot tier-2"></span><span>$140K - $190K (Starter)</span></div>
+                                <div class="legend-dot-item"><span class="color-dot tier-3"></span><span>$190K - $250K (Mid-Market)</span></div>
+                                <div class="legend-dot-item"><span class="color-dot tier-4"></span><span>$250K - $330K (Upper Tier)</span></div>
+                                <div class="legend-dot-item"><span class="color-dot tier-5"></span><span>Over $330K (Luxury Tier)</span></div>
                             </div>
                         </div>
 
                         <!-- Instruction Toast -->
                         <div id="map-instructions" class="map-instruction-toast">
-                            <span class="pulse-icon">📍</span>
-                            <span>Hover over any house dot to see full specs, or click anywhere on the map to estimate that location</span>
+                            <span>Hover over any house dot to inspect specs, or click anywhere on the map to evaluate a location</span>
                         </div>
                     </div>
 
-                    <!-- Clean Compact Side Inspector Panel -->
+                    <!-- Clean Side Inspector Panel -->
                     <div id="map-inspector" class="map-inspector-panel hidden">
                         <div class="inspector-header">
                             <div>
                                 <div class="inspector-badge-row">
                                     <span id="insp-badge" class="parcel-badge">HOUSE #1</span>
-                                    <span id="insp-model" class="model-tag">CatBoost AI Model</span>
+                                    <span id="insp-model" class="model-tag">CatBoost Regressor</span>
                                 </div>
-                                <h3 id="insp-location">College Creek · Ames, IA</h3>
+                                <h3 id="insp-location">College Creek, Ames, IA</h3>
                             </div>
                             <button class="btn-icon" onclick="closeInspector()" title="Close inspector">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -468,7 +466,7 @@
 
                         <!-- Price Ticker -->
                         <div class="inspector-price-box">
-                            <span class="insp-price-caption">VALUATION ESTIMATE</span>
+                            <span class="insp-price-caption">ESTIMATED VALUATION</span>
                             <div id="insp-price" class="insp-big-price">$0</div>
                             <div class="insp-meta-row">
                                 <span id="insp-sqft-rate">$0 / sqft</span>
@@ -476,11 +474,11 @@
                             </div>
                         </div>
 
-                        <!-- Quick Sliders Form -->
+                        <!-- Sliders Form -->
                         <div class="inspector-form-area">
                             <div class="form-group">
                                 <div class="label-with-badge">
-                                    <label for="insp-OverallQual">Material Quality (1-10)</label>
+                                    <label for="insp-OverallQual">Overall Quality (1-10)</label>
                                     <span id="insp-qual-badge" class="badge-accent">7</span>
                                 </div>
                                 <input type="range" id="insp-OverallQual" min="1" max="10" value="7" class="slider" oninput="handleInspectorInput()">
@@ -492,7 +490,7 @@
                                     <input type="number" id="insp-GrLivArea" class="form-input" value="1800" oninput="handleInspectorInput()">
                                 </div>
                                 <div class="form-group">
-                                    <label for="insp-YearBuilt">Vintage (Year)</label>
+                                    <label for="insp-YearBuilt">Year Built</label>
                                     <input type="number" id="insp-YearBuilt" class="form-input" value="2005" oninput="handleInspectorInput()">
                                 </div>
                             </div>
@@ -523,8 +521,7 @@
                             <details class="advanced-specs-drawer">
                                 <summary class="advanced-specs-summary">
                                     <span class="summary-left">
-                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-                                        <strong>Advanced Specs</strong>
+                                        <strong>Advanced Specifications</strong>
                                     </span>
                                     <span class="summary-hint">Edit</span>
                                 </summary>
@@ -567,7 +564,7 @@
                             </details>
                         </div>
 
-                        <!-- Mini Value Attribution -->
+                        <!-- Value Attribution -->
                         <div class="inspector-attr-area">
                             <div class="attr-header">Value Attribution</div>
                             <div id="insp-attribution-list" class="attr-list-compact"></div>
@@ -587,22 +584,22 @@
 
 
             <!-- ============================================================
-                 SECTION 3: 📖 Machine Learning Guide (Educational Documentation)
+                 SECTION 3: Model Documentation (Human-Written Guide)
                  ============================================================ -->
             <section id="section-docs" class="app-section">
                 <div class="docs-layout">
                     <!-- Docs Sidebar Navigation -->
                     <aside class="docs-sidebar">
                         <div class="docs-sidebar-header">
-                            <span>MACHINE LEARNING GUIDE</span>
+                            <span>DOCUMENTATION</span>
                         </div>
                         <ul class="docs-nav-list">
-                            <li><a href="#doc-overview" class="docs-nav-link active" onclick="smoothScrollDoc('doc-overview')">1. What is Machine Learning?</a></li>
-                            <li><a href="#doc-algos" class="docs-nav-link" onclick="smoothScrollDoc('doc-algos')">2. The 5 Algorithms Explained</a></li>
-                            <li><a href="#doc-benchmarks" class="docs-nav-link" onclick="smoothScrollDoc('doc-benchmarks')">3. Tournament Leaderboard</a></li>
-                            <li><a href="#doc-feature-engineering" class="docs-nav-link" onclick="smoothScrollDoc('doc-feature-engineering')">4. Smart Feature Engineering</a></li>
-                            <li><a href="#doc-leakage" class="docs-nav-link" onclick="smoothScrollDoc('doc-leakage')">5. The "Cheating" Trap (Leakage)</a></li>
-                            <li><a href="#doc-valuation" class="docs-nav-link" onclick="smoothScrollDoc('doc-valuation')">6. How Valuations Work</a></li>
+                            <li><a href="#doc-overview" class="docs-nav-link active" onclick="smoothScrollDoc('doc-overview')">1. Project Overview</a></li>
+                            <li><a href="#doc-algos" class="docs-nav-link" onclick="smoothScrollDoc('doc-algos')">2. Algorithms Evaluated</a></li>
+                            <li><a href="#doc-benchmarks" class="docs-nav-link" onclick="smoothScrollDoc('doc-benchmarks')">3. Benchmark Results</a></li>
+                            <li><a href="#doc-feature-engineering" class="docs-nav-link" onclick="smoothScrollDoc('doc-feature-engineering')">4. Feature Engineering</a></li>
+                            <li><a href="#doc-leakage" class="docs-nav-link" onclick="smoothScrollDoc('doc-leakage')">5. Target Leakage Prevention</a></li>
+                            <li><a href="#doc-valuation" class="docs-nav-link" onclick="smoothScrollDoc('doc-valuation')">6. Valuation Methodology</a></li>
                         </ul>
                     </aside>
 
@@ -611,163 +608,163 @@
                         
                         <!-- Chapter 1 -->
                         <article id="doc-overview" class="doc-chapter">
-                            <span class="chapter-num">Chapter 1</span>
-                            <h2>What is Machine Learning in Real Estate?</h2>
-                            <p>Imagine hiring a veteran real estate appraiser who has personally inspected and studied <strong>thousands of real home sales</strong>. When you show them a new house, they don't guess blindly — they compare its location, square footage, materials, and age against every home they have ever seen.</p>
-                            <p><strong>Machine Learning (ML)</strong> works the exact same way, but with mathematical algorithms. Instead of a human writing rigid rules like <em>"always add $100 per square foot"</em>, we feed the computer historical housing data, and it mathematically discovers the intricate, non-linear relationships between property characteristics and market prices.</p>
+                            <span class="chapter-num">Section 1</span>
+                            <h2>Project Overview</h2>
+                            <p>This project implements a machine learning system for estimating residential real estate values. The primary focus is the Ames, Iowa housing dataset, with an additional high-volume international dataset used to evaluate model scalability across global markets.</p>
+                            <p>Rather than using fixed pricing heuristics, the system uses supervised regression pipelines that learn non-linear relationships between property characteristics and historical transaction prices.</p>
                             
                             <div class="doc-cards-grid">
                                 <div class="doc-card">
-                                    <div class="doc-card-title">🇺🇸 The Ames Dataset (Detailed Specs)</div>
-                                    <p>1,460 real residential properties from Ames, Iowa with 81 granular details (wood deck sizes, fireplace counts, roof styles, masonry types, basement finishes).</p>
-                                    <div class="doc-tag">Champion Algorithm: CatBoost (90.9% Accuracy)</div>
+                                    <div class="doc-card-title">Ames Housing Dataset (Primary Focus)</div>
+                                    <p>1,460 residential properties with 81 attributes detailing structural characteristics, materials, basement finishes, garage types, and neighborhood locations.</p>
+                                    <div class="doc-tag">Champion Model: CatBoost (Holdout R-squared: 0.9094)</div>
                                 </div>
                                 <div class="doc-card">
-                                    <div class="doc-card-title">🌐 The Global Dataset (Macro Scale)</div>
-                                    <p>200,000 real estate transactions across 13 countries and 40 international cities (Tokyo, London, Berlin, New York, Sydney, Dubai).</p>
-                                    <div class="doc-tag">Champion Algorithm: Random Forest (99.9% Accuracy)</div>
+                                    <div class="doc-card-title">Global Housing Dataset (Scalability Test)</div>
+                                    <p>200,000 transaction records across 13 countries and 40 international metropolitan markets.</p>
+                                    <div class="doc-tag">Champion Model: Random Forest (Holdout R-squared: 0.9999)</div>
                                 </div>
                             </div>
                         </article>
 
                         <!-- Chapter 2 -->
                         <article id="doc-algos" class="doc-chapter">
-                            <span class="chapter-num">Chapter 2</span>
-                            <h2>The 5 Algorithms We Tested (Explained with Simple Analogies)</h2>
-                            <p>Not all AI models think the same way. We pitted <strong>5 distinct machine learning algorithms</strong> against each other to find the absolute best performers:</p>
+                            <span class="chapter-num">Section 2</span>
+                            <h2>Algorithms Evaluated</h2>
+                            <p>To determine the most effective approach for tabular real estate data, five regression algorithms were benchmarked under identical cross-validation conditions:</p>
                             
                             <div class="doc-card" style="margin-bottom: 12px;">
-                                <div class="doc-card-title">📈 1. Ridge Regression — The Straight-Line Baseline</div>
-                                <p><strong>How it thinks:</strong> Ridge tries to draw a single straight line through the data. It assigns a fixed dollar weight to each feature (e.g. +$85 per sq ft, +$15,000 per extra bathroom) while applying a mathematical penalty ("regularization") so no single feature gets out of control.</p>
-                                <p><strong>Strengths:</strong> Extremely simple, blazing fast, and transparent. Great baseline to check if fancy AI is truly necessary.</p>
+                                <div class="doc-card-title">1. Ridge Regression (Linear Baseline)</div>
+                                <p>Ridge regression fits a linear relationship between features and target prices with L2 regularization to prevent extreme coefficient weights. It provides a clean baseline to assess whether non-linear tree ensembles provide meaningful accuracy improvements.</p>
                             </div>
 
                             <div class="doc-card" style="margin-bottom: 12px;">
-                                <div class="doc-card-title">🌲 2. Random Forest — The Committee of 100+ Decision Trees</div>
-                                <p><strong>How it thinks:</strong> Instead of relying on one expert, Random Forest creates a whole forest of 100+ independent decision trees. Each tree asks yes/no questions (<em>"Is size > 2,000 sqft? Is quality ≥ 7? Was it built after 2000?"</em>). All 100 trees vote on the price, and the average vote wins.</p>
-                                <p><strong>Strengths:</strong> Highly resilient, won't make wild mistakes, and won <strong>1st place</strong> on our 200k global dataset with 99.9% accuracy.</p>
+                                <div class="doc-card-title">2. Random Forest (Bagging Ensemble)</div>
+                                <p>Random Forest builds an ensemble of decorrelated decision trees, averaging their predictions to reduce variance. On large, uniform datasets like the 200,000-row global dataset, it delivered the highest stability and lowest error rate.</p>
                             </div>
 
                             <div class="doc-card" style="margin-bottom: 12px;">
-                                <div class="doc-card-title">⚡ 3. LightGBM — The Fast Gradient Booster</div>
-                                <p><strong>How it thinks:</strong> Unlike Random Forest where trees work independently, Gradient Boosting builds trees sequentially. Tree #2 focuses specifically on the houses Tree #1 got wrong. Tree #3 focuses on the remaining mistakes, continuously correcting previous errors. LightGBM speeds this up by sorting numbers into quick "bins" (histograms).</p>
-                                <p><strong>Strengths:</strong> Incredibly fast training on massive datasets with minimal RAM usage.</p>
+                                <div class="doc-card-title">3. LightGBM (Histogram-Based Boosting)</div>
+                                <p>LightGBM grows trees leaf-wise and buckets continuous features into discrete histogram bins, significantly reducing memory consumption and accelerating training speeds on large datasets.</p>
                             </div>
 
                             <div class="doc-card" style="margin-bottom: 12px;">
-                                <div class="doc-card-title">🎯 4. XGBoost — The Ultra-Cautious Master</div>
-                                <p><strong>How it thinks:</strong> Similar to LightGBM, but with strict mathematical penalties on complexity. If a tree branch doesn't provide significant proof of improving accuracy, XGBoost cuts (prunes) it off immediately.</p>
-                                <p><strong>Strengths:</strong> World-famous across competitive data science tournaments for robust generalization.</p>
+                                <div class="doc-card-title">4. XGBoost (Exact Gradient Boosting)</div>
+                                <p>XGBoost builds trees sequentially using second-order gradients and explicit tree-pruning penalties, making it robust against overfitting in tabular competitions.</p>
                             </div>
 
                             <div class="doc-card" style="border-color: var(--border-accent); background: rgba(79, 143, 247, 0.08);">
-                                <div class="doc-card-title" style="color: var(--primary);">👑 5. CatBoost — The Categorical Master (Ames Champion)</div>
-                                <p><strong>How it thinks:</strong> Real estate data is full of text categories: neighborhood names, kitchen qualities, roof materials, zoning codes. Most algorithms struggle with words, but CatBoost specializes in turning text into smart mathematical coordinates without memorizing the training data.</p>
-                                <p><strong>Strengths:</strong> Won <strong>1st place</strong> on the Ames Housing dataset with the lowest error rate of all models ($14,983 average difference).</p>
+                                <div class="doc-card-title" style="color: var(--primary);">5. CatBoost (Ames Champion)</div>
+                                <p>CatBoost handles categorical variables through ordered target statistics without causing target leakage during training. Because the Ames dataset contains numerous high-cardinality nominal features (such as 25 distinct neighborhoods and multiple zoning classifications), CatBoost achieved the lowest prediction error of all evaluated models.</p>
                             </div>
                         </article>
 
                         <!-- Chapter 3 -->
                         <article id="doc-benchmarks" class="doc-chapter">
-                            <span class="chapter-num">Chapter 3</span>
-                            <h2>The Tournament Leaderboard & How We Graded the Models</h2>
-                            <p>To grade the models fairly and prevent "memorization" (overfitting), we used <strong>5-Fold Cross-Validation</strong>: splitting the data into 5 slices, training on 4 slices, and testing on the 5th slice, repeating this 5 times so every single home was tested on fresh, unseen data.</p>
+                            <span class="chapter-num">Section 3</span>
+                            <h2>Benchmark Results</h2>
+                            <p>Models were evaluated using 5-fold cross-validation during Optuna hyperparameter tuning, followed by testing on an independent 20% holdout split.</p>
                             
-                            <div class="doc-callout" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #a7f3d0; margin-bottom: 16px;">
-                                <strong>Understanding the Scorecards:</strong><br>
-                                • <strong>R² Score (Accuracy %):</strong> 0.9094 means the model explains <strong>91%</strong> of all price differences in the market.<br>
-                                • <strong>MAE (Mean Absolute Error):</strong> The average dollar amount the prediction is off by (lower is better).
-                            </div>
-
-                            <h3>🇺🇸 Ames Housing Tournament (1,460 Homes)</h3>
+                            <h3>Ames Housing Dataset (1,460 Samples, 81 Features)</h3>
                             <table class="doc-table">
                                 <thead>
                                     <tr>
                                         <th>Rank</th>
                                         <th>Model Name</th>
-                                        <th>Accuracy (R²)</th>
-                                        <th>Average Dollar Error (MAE)</th>
-                                        <th>Verdict</th>
+                                        <th>5-Fold CV log-RMSE</th>
+                                        <th>Holdout R-squared</th>
+                                        <th>Holdout MAE (USD)</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr class="winner-row">
-                                        <td>🥇</td>
+                                        <td>1</td>
                                         <td><strong>CatBoost (Tuned)</strong></td>
-                                        <td><strong>90.94%</strong></td>
+                                        <td><strong>0.11561</strong></td>
+                                        <td><strong>0.9094</strong></td>
                                         <td><strong>$14,983</strong></td>
-                                        <td><span class="table-chip winner">🏆 Production Champion</span></td>
+                                        <td><span class="table-chip winner">Production Model</span></td>
                                     </tr>
                                     <tr>
-                                        <td>🥈</td>
+                                        <td>2</td>
                                         <td><strong>XGBoost (Tuned)</strong></td>
-                                        <td>90.52%</td>
+                                        <td>0.12133</td>
+                                        <td>0.9052</td>
                                         <td>$15,433</td>
                                         <td><span class="table-chip">Runner-Up</span></td>
                                     </tr>
                                     <tr>
-                                        <td>🥉</td>
+                                        <td>3</td>
                                         <td><strong>LightGBM (Tuned)</strong></td>
-                                        <td>90.13%</td>
+                                        <td>0.12240</td>
+                                        <td>0.9013</td>
                                         <td>$16,309</td>
-                                        <td><span class="table-chip">Strong Contender</span></td>
+                                        <td><span class="table-chip">Contender</span></td>
                                     </tr>
                                     <tr>
                                         <td>4</td>
                                         <td><strong>Ridge Regression</strong></td>
-                                        <td>91.14%</td>
+                                        <td>0.13433</td>
+                                        <td>0.9114</td>
                                         <td>$15,795</td>
                                         <td><span class="table-chip">Linear Baseline</span></td>
                                     </tr>
                                     <tr>
                                         <td>5</td>
                                         <td><strong>Random Forest</strong></td>
-                                        <td>89.13%</td>
+                                        <td>0.13740</td>
+                                        <td>0.8913</td>
                                         <td>$16,588</td>
                                         <td><span class="table-chip">Bagging Baseline</span></td>
                                     </tr>
                                 </tbody>
                             </table>
 
-                            <h3 style="margin-top: 24px;">🌐 Global Housing Tournament (200,000 Homes across 40 Cities)</h3>
+                            <h3 style="margin-top: 24px;">Global Housing Dataset (200,000 Samples, 40 Cities)</h3>
                             <table class="doc-table">
                                 <thead>
                                     <tr>
                                         <th>Rank</th>
                                         <th>Model Name</th>
-                                        <th>Accuracy (R²)</th>
-                                        <th>Average Dollar Error (MAE)</th>
-                                        <th>Percentage Error</th>
+                                        <th>5-Fold CV log-RMSE</th>
+                                        <th>Holdout R-squared</th>
+                                        <th>Holdout MAE (USD)</th>
+                                        <th>Holdout MAPE</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr class="winner-row">
-                                        <td>🥇</td>
+                                        <td>1</td>
                                         <td><strong>Random Forest</strong></td>
-                                        <td><strong>99.99%</strong></td>
+                                        <td><strong>0.00877</strong></td>
+                                        <td><strong>0.9999</strong></td>
                                         <td><strong>$2,600</strong></td>
-                                        <td><strong>0.4% error</strong></td>
+                                        <td><strong>0.4%</strong></td>
                                     </tr>
                                     <tr>
-                                        <td>🥈</td>
+                                        <td>2</td>
                                         <td><strong>CatBoost</strong></td>
-                                        <td>99.98%</td>
+                                        <td>0.00917</td>
+                                        <td>0.9998</td>
                                         <td>$4,725</td>
-                                        <td>0.6% error</td>
+                                        <td>0.6%</td>
                                     </tr>
                                     <tr>
-                                        <td>🥉</td>
+                                        <td>3</td>
                                         <td><strong>XGBoost</strong></td>
-                                        <td>99.99%</td>
+                                        <td>0.00963</td>
+                                        <td>0.9999</td>
                                         <td>$4,266</td>
-                                        <td>0.5% error</td>
+                                        <td>0.5%</td>
                                     </tr>
                                     <tr>
                                         <td>4</td>
                                         <td><strong>LightGBM</strong></td>
-                                        <td>99.99%</td>
+                                        <td>0.00977</td>
+                                        <td>0.9999</td>
                                         <td>$3,794</td>
-                                        <td>0.5% error</td>
+                                        <td>0.5%</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -775,58 +772,52 @@
 
                         <!-- Chapter 4 -->
                         <article id="doc-feature-engineering" class="doc-chapter">
-                            <span class="chapter-num">Chapter 4</span>
-                            <h2>Smart Feature Engineering: Giving the AI Common Sense</h2>
-                            <p>Raw numbers alone don't tell the full story. For example, a house might have 3 full bathrooms and 2 half bathrooms. If we just give the AI raw numbers, it might treat a half-bath the same as a full master bath with a shower.</p>
-                            <p>We engineered <strong>12 domain-specific features</strong> to give the AI real-world intuition:</p>
+                            <span class="chapter-num">Section 4</span>
+                            <h2>Feature Engineering</h2>
+                            <p>To improve predictive accuracy without overfitting, domain-specific feature transformations were created:</p>
                             
                             <div class="doc-cards-grid">
                                 <div class="doc-card">
-                                    <div class="doc-card-title">📐 Total Usable Footprint</div>
-                                    <p>Combines living room space + finished basement area so the model evaluates the whole livable home, not just the upper floor.</p>
+                                    <div class="doc-card-title">Total Enclosed Footprint</div>
+                                    <p>Combines above-grade living area and finished basement area to capture total usable enclosed square footage.</p>
                                 </div>
                                 <div class="doc-card">
-                                    <div class="doc-card-title">💎 Quality × Condition Multiplier</div>
-                                    <p>A home with high build quality that is poorly maintained depreciates quickly. Multiplying Quality by Condition captures this non-linear interaction.</p>
+                                    <div class="doc-card-title">Quality and Condition Interaction</div>
+                                    <p>Multiplies Overall Quality by Overall Condition to capture the non-linear relationship between construction grade and ongoing maintenance.</p>
                                 </div>
                                 <div class="doc-card">
-                                    <div class="doc-card-title">🛁 Fractional Bathrooms</div>
-                                    <p>Calculates: <code>Full Baths + (0.5 × Half Baths)</code> to represent true plumbing capacity.</p>
+                                    <div class="doc-card-title">Fractional Bathroom Metric</div>
+                                    <p>Computes full bathrooms plus half the count of half-bathrooms to accurately represent sanitary capacity.</p>
                                 </div>
                                 <div class="doc-card">
-                                    <div class="doc-card-title">🔨 Renovation Indicator</div>
-                                    <p>Checks if the remodel year differs from the original build year, allowing the AI to reward modernized vintage homes.</p>
+                                    <div class="doc-card-title">Remodel Indicator</div>
+                                    <p>Flags whether a property underwent major remodeling after its original construction year.</p>
                                 </div>
                             </div>
                         </article>
 
                         <!-- Chapter 5 -->
                         <article id="doc-leakage" class="doc-chapter">
-                            <span class="chapter-num">Chapter 5</span>
-                            <h2>Preventing the "Cheating on the Test" Trap (Target Leakage)</h2>
-                            <p>When training an AI, it's very easy to accidentally give it a feature that secretly gives away the answer. This is known in machine learning as <strong>Target Leakage</strong>.</p>
-                            <p>In the 200,000-row global dataset, the raw data included columns like <code>loan_amount</code> and <code>down_payment</code>. Our exploratory analysis showed that <code>loan_amount</code> had a <strong>94% correlation</strong> with the house price!</p>
-                            
+                            <span class="chapter-num">Section 5</span>
+                            <h2>Target Leakage Prevention</h2>
+                            <p>During initial analysis of the global dataset, correlation metrics indicated that loan amounts (r = 0.938) and down payments (r = 0.851) were strongly correlated with property prices.</p>
                             <div class="doc-callout warning">
-                                <strong>Why is this cheating?</strong> In the real world, a bank calculates your loan amount <em>after</em> the home is appraised, not before! If an AI uses the loan amount to predict the price, it isn't actually appraising the house — it's just reading the bank's receipt.
+                                <strong>Rationale:</strong> In real estate transactions, loan amounts and down payments are computed after property appraisal, not before. Including financing numbers in a valuation model constitutes target leakage.
                             </div>
-
-                            <p><strong>Our Solution:</strong> In our production model, we completely removed loan and down payment variables. The AI is forced to appraise the property honestly using only physical and location facts: square footage, room count, city, country, construction vintage, and local amenities.</p>
+                            <p>In the production model, all financing fields were removed. The model trains strictly on intrinsic physical attributes: square footage, room counts, building age, location, and structural characteristics.</p>
                         </article>
 
                         <!-- Chapter 6 -->
                         <article id="doc-valuation" class="doc-chapter">
-                            <span class="chapter-num">Chapter 6</span>
-                            <h2>How Predictions & Attributions Work in Practice</h2>
-                            <p>When you move a slider or click a house dot on the map, the AI performs an instantaneous valuation and breaks down exactly where every dollar comes from:</p>
-                            
+                            <span class="chapter-num">Section 6</span>
+                            <h2>Valuation Methodology</h2>
+                            <p>When evaluating a property, the system follows a structured estimation procedure:</p>
                             <div class="doc-card">
-                                <div class="doc-card-title">🔍 The 4-Step Valuation Process:</div>
                                 <ol style="padding-left: 20px; display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
-                                    <li><strong>1. Neighborhood Baseline:</strong> The model looks at the median historical sales price in that specific neighborhood or city.</li>
-                                    <li><strong>2. Feature Adjustments:</strong> It computes additions/deductions for square footage, material craftsmanship rating, construction era, and garage capacity.</li>
-                                    <li><strong>3. Non-Linear Boosting:</strong> CatBoost or Random Forest evaluates complex interactions (e.g., luxury finishes add more value in high-income neighborhoods than in starter neighborhoods).</li>
-                                    <li><strong>4. Confidence Range:</strong> It calculates a 95% Confidence Interval ($[\text{Lower}, \text{Upper}]$) based on holdout validation margins, so buyers and sellers know the realistic pricing bounds.</li>
+                                    <li><strong>1. Neighborhood Baseline:</strong> Determines the median historical sales price for the specific neighborhood.</li>
+                                    <li><strong>2. Feature Adjustments:</strong> Calculates additions and deductions for living area, material quality rating, vintage, and garage storage.</li>
+                                    <li><strong>3. Non-Linear Interaction:</strong> CatBoost evaluates interaction terms across all 81 structural attributes.</li>
+                                    <li><strong>4. Confidence Range:</strong> Computes a 95% confidence interval based on cross-validation residuals.</li>
                                 </ol>
                             </div>
                         </article>
@@ -840,9 +831,9 @@
             <div class="modal-card modal-appraisal" onclick="event.stopPropagation()">
                 <div class="modal-header no-print">
                     <div class="modal-title-group">
-                        <span class="appraisal-cert-badge">OFFICIAL VALUATION APPRAISAL</span>
+                        <span class="appraisal-cert-badge">VALUATION APPRAISAL CERTIFICATE</span>
                         <h2>Ames Home Prediction Project</h2>
-                        <span class="modal-subtitle">Algorithmic Real Estate Appraisal Certificate & Structural Assessment</span>
+                        <span class="modal-subtitle">Real Estate Appraisal Report & Structural Valuation</span>
                     </div>
                     <div class="header-modal-btns">
                         <button class="btn btn-primary" onclick="printAppraisalReport()" title="Print or save as PDF">

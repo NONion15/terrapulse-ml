@@ -1,274 +1,223 @@
-# 🏡 Ames Home Prediction Project — Intelligent Real Estate Valuation & Learning Guide
+# Ames Home Prediction Project
 
-> **A beginner-friendly, comprehensive guide to Machine Learning, Regression Algorithms, and Real Estate Valuation.**
+A machine learning project for residential real estate price estimation, built on the Ames, Iowa housing dataset with secondary validation on a 200,000-record international dataset.
 
-Welcome to the **Ames Home Prediction Project**! This project is an end-to-end Machine Learning (ML) system that predicts residential property values. Whether you are a beginner taking your first steps into AI, a student preparing an assessment, or a developer exploring machine learning, this repository is designed to be **clear, educational, and easy to understand from scratch**.
-
----
-
-## 📑 Table of Contents
-1. [🌟 What is This Project? (The Big Picture)](#-what-is-this-project-the-big-picture)
-2. [🧠 Machine Learning 101: Key Concepts Explained Simply](#-machine-learning-101-key-concepts-explained-simply)
-3. [🤖 The 5 Algorithms We Tested (With Simple Analogies)](#-the-5-algorithms-we-tested-with-simple-analogies)
-4. [🏆 Tournament Leaderboard: Which Algorithm Won?](#-tournament-leaderboard-which-algorithm-won)
-5. [🔍 Smart Feature Engineering: Giving AI Common Sense](#-smart-feature-engineering-giving-ai-common-sense)
-6. [⚠️ Target Leakage: The "Cheating on the Test" Trap](#️-target-leakage-the-cheating-on-the-test-trap)
-7. [📁 Codebase Walkthrough: What Every File Does](#-codebase-walkthrough-what-every-file-does)
-8. [🚀 Step-by-Step Quickstart Guide](#-step-by-step-quickstart-guide)
-9. [🎨 How the 3-Section Web App Works](#-how-the-3-section-web-app-works)
+This repository contains the end-to-end code for data preprocessing, feature engineering, model training with Bayesian hyperparameter optimization, and a lightweight web interface for interactive property evaluation and geospatial exploration.
 
 ---
 
-## 🌟 What is This Project? (The Big Picture)
-
-When a human real estate appraiser values a house, they don't guess blindly. They inspect the house (its square footage, number of bedrooms, materials, construction year, neighborhood) and compare it against **hundreds of past home sales** they remember.
-
-**Machine Learning does the exact same thing using mathematics.**
-
-Instead of writing thousands of rigid if-else rules (like *"if 3 bedrooms add $20,000"*), we feed the computer historical records of home sales. The computer studies the numbers, detects patterns, and learns how much each characteristic contributes to a home's market value.
-
-This project trains and compares **5 competitive machine learning algorithms** across two diverse datasets:
-- 🇺🇸 **Ames Housing Dataset (1,460 Homes):** Deep, granular US properties with 81 detailed features (fireplaces, basement finishes, roof styles, kitchen grades).
-- 🌐 **Global Housing Dataset (200,000 Homes):** Large-scale international transactions spanning 13 countries and 40 metropolitan cities (Tokyo, London, New York, Berlin, Sydney, Dubai).
-
----
-
-## 🧠 Machine Learning 101: Key Concepts Explained Simply
-
-If you're new to AI and Data Science, here are the core concepts used throughout this project:
-
-```
-+-------------------------------------------------------------+
-|                     MACHINE LEARNING FLOW                   |
-|                                                             |
-|   [ Historical Data ]                                       |
-|    (Features + Prices)                                      |
-|             │                                               |
-|             ▼                                               |
-|   [ Algorithm Training ] ───► Learns Mathematical Patterns  |
-|             │                                               |
-|             ▼                                               |
-|   [ Validation (5-Fold) ] ──► Tests on Unseen "Exam" Data   |
-|             │                                               |
-|             ▼                                               |
-|   [ Final Prediction ] ───► Estimates Price for New House   |
-+-------------------------------------------------------------+
-```
-
-### 1. Features vs. Target
-- **Features ($X$):** The clues/inputs (e.g., Living Area, Quality Rating, Bedrooms, Neighborhood).
-- **Target ($y$):** The answer we want to predict (the **Sale Price** in dollars).
-
-### 2. Training vs. Testing (Practice vs. The Final Exam)
-If a student memorizes the exact questions and answers to a practice test, they might get 100%. But if they fail the actual final exam with new questions, they didn't really learn — they just memorized!
-- In ML, memorizing is called **Overfitting**.
-- To prevent this, we split the data: we let the algorithm study **80% of the houses** (Training Set), and grade its performance on the remaining **20% of houses it has never seen before** (Test Set).
-
-### 3. 5-Fold Cross-Validation (Fair Grading)
-Instead of testing on just one lucky slice, we divide the data into **5 equal buckets**:
-- Round 1: Train on buckets 1-4, test on bucket 5.
-- Round 2: Train on buckets 1, 2, 3, 5, test on bucket 4.
-- ... Repeat 5 times!
-- The average score tells us the true, honest performance of the algorithm.
-
-### 4. How We Grade the Models (Scorecard Metrics)
-- **$R^2$ Score (Accuracy %):** Measures how much of the variation in home prices our model explains. A score of `0.9094` means the model explains **90.94%** of all pricing differences in the market!
-- **MAE (Mean Absolute Error):** The average dollar amount the prediction is off by (e.g., $\pm \$14,983$). Lower is better.
-- **log-RMSE (Log Root Mean Squared Error):** Penalizes large percentage mistakes more heavily than small ones.
+## Table of Contents
+1. Project Overview
+2. Core Machine Learning Concepts
+3. Models Evaluated and Comparison
+4. Benchmark Results and Findings
+5. Feature Engineering Pipeline
+6. Target Leakage Prevention
+7. Repository Structure
+8. Quickstart and Installation Guide
+9. Web Application Features
 
 ---
 
-## 🤖 The 5 Algorithms We Tested (With Simple Analogies)
+## 1. Project Overview
 
-We evaluated 5 different regression algorithms to find out which one performs best:
+Real estate valuation typically relies on manual comparative market analysis (CMA), where an appraiser identifies comparable properties and adjusts for differences in square footage, condition, and location.
 
-### 📈 1. Ridge Regression (The Straight-Line Baseline)
-- **The Analogy:** An appraiser who assigns a fixed price per unit (e.g., +$85/sq ft, +$15,000/bathroom).
-- **How it works:** Draws a best-fit straight line through the data. It uses a mathematical penalty called *L2 Regularization* so no single feature gets an exaggerated, unrealistic weight.
-- **Verdict:** Solid baseline, but struggles with complex curves and non-linear interactions.
+This project models that process mathematically using supervised machine learning algorithms. Instead of relying on hardcoded heuristics, the models learn the non-linear relationships between physical property characteristics, building materials, neighborhood locations, and historical transaction prices.
 
-### 🌲 2. Random Forest (The Committee of 100+ Trees)
-- **The Analogy:** Instead of trusting 1 appraiser, you ask a committee of **100 independent decision trees**.
-- **How it works:** Each tree asks a series of yes/no questions (*"Is living area > 1,800 sq ft? Is quality ≥ 7? Was it built after 2000?"*). Every tree casts a vote, and the average vote wins.
-- **Verdict:** Won **1st place on the 200,000-row Global dataset** ($R^2 = 0.9999$). Highly resilient and virtually immune to erratic mistakes.
-
-### ⚡ 3. LightGBM (The Lightning-Fast Speedster)
-- **The Analogy:** A relay team where Student 2 focuses only on the questions Student 1 got wrong, and Student 3 focuses on what Student 2 missed.
-- **How it works:** Sequentially corrects errors (Gradient Boosting). LightGBM sorts continuous numbers into discrete "bins" (histograms), making it blazingly fast.
-- **Verdict:** Trained 200,000 rows in less than 3 seconds with excellent accuracy.
-
-### 🎯 4. XGBoost (The Extreme Precision Master)
-- **The Analogy:** A meticulous, ultra-cautious gradient booster.
-- **How it works:** Similar to LightGBM, but uses stricter mathematical penalties on tree depth. If a branch doesn't provide significant proof of improving accuracy, XGBoost cuts (prunes) it off immediately.
-- **Verdict:** Runner-up on Ames ($R^2 = 0.9052$), world-renowned across competitive Kaggle competitions.
-
-### 👑 5. CatBoost (The Categorical Master — Ames Champion)
-- **The Analogy:** An appraiser who is a genius at understanding words and labels (neighborhood names, roof styles, kitchen grades, zoning codes).
-- **How it works:** Traditional algorithms struggle with text and require complex encoding. CatBoost specializes in converting text categories into intelligent mathematical relationships on the fly without memorizing the training data.
-- **Verdict:** Won **1st place on Ames Housing** with the lowest error rate ($\text{MAE} = \$14,983$, $R^2 = 0.9094$).
+The system evaluates two distinct datasets:
+- **Ames Housing Dataset (Primary Focus):** 1,460 residential properties from Ames, Iowa, containing 81 detailed attributes such as basement finishes, roof materials, masonry veneer, and zoning codes.
+- **Global Housing Dataset (Scalability Benchmark):** 200,000 transaction records across 13 countries and 40 metropolitan markets, used to evaluate model stability on large-scale data.
 
 ---
 
-## 🏆 Tournament Leaderboard: Which Algorithm Won?
+## 2. Core Machine Learning Concepts
 
-### 🇺🇸 Ames Housing Tournament (1,460 Properties, 81 Features)
+For readers new to machine learning, here is how the core pipeline operates:
 
-| Rank | Algorithm | 5-Fold CV log-RMSE | Holdout Accuracy ($R^2$) | Average Dollar Error (MAE) | Verdict |
+### Features vs. Target
+- **Features (X):** The input variables describing each home (living area, year built, overall quality rating, bathroom count, neighborhood).
+- **Target (y):** The continuous numerical value we want to predict (Sale Price in US Dollars).
+
+### Training vs. Testing Splits
+To verify that the model actually learns underlying pricing patterns rather than simply memorizing the dataset (known as overfitting), we split the data:
+- **Training Set (80%):** The historical records used by the algorithm to adjust its internal parameters.
+- **Test Set (20%):** Held-out data that the model has never seen before, used to calculate honest evaluation scores.
+
+### 5-Fold Cross-Validation
+During hyperparameter tuning, we use 5-fold cross-validation. The training data is split into 5 equal subsets (folds). The model is trained on 4 folds and validated on the 5th, repeating 5 times so every data point is tested out-of-fold. The average score across all 5 folds provides a reliable estimate of generalization performance.
+
+### Evaluation Metrics
+- **R-squared (Coefficient of Determination):** Represents the proportion of variance in home prices explained by the model. An R-squared of 0.9094 means the model accounts for roughly 91% of the price variation in the market.
+- **MAE (Mean Absolute Error):** The average dollar amount the prediction differs from the actual sale price (lower is better).
+- **log-RMSE (Root Mean Squared Logarithmic Error):** Measures relative percentage error rather than absolute dollar error, preventing expensive luxury homes from dominating the loss calculation.
+
+---
+
+## 3. Models Evaluated and Comparison
+
+We tested five regression algorithms to understand how different model architectures handle tabular real estate data:
+
+### 1. Ridge Regression (Linear Baseline)
+- **Concept:** Fits a linear equation with L2 weight regularization to penalize overly large coefficients.
+- **Role:** Serves as a standard baseline to check whether complex tree ensembles genuinely outperform linear math.
+- **Result:** Solid linear baseline (R-squared: 0.9114), but limited in capturing non-linear feature interactions without manual polynomial expansion.
+
+### 2. Random Forest (Bagging Ensemble)
+- **Concept:** Constructs a large ensemble (100+ trees) of independent decision trees trained on random subsets of data and features. Final predictions are computed by averaging all tree outputs.
+- **Result:** Won 1st place on the 200,000-row global dataset (R-squared: 0.9999, MAE: $2,600). Excellent stability and resistance to variance on large datasets.
+
+### 3. LightGBM (Histogram Gradient Boosting)
+- **Concept:** A gradient boosting framework that buckets continuous values into discrete histogram bins and grows trees leaf-wise.
+- **Result:** Blazing fast training times (<3 seconds on 200k rows) with competitive accuracy (R-squared: 0.9013 on Ames).
+
+### 4. XGBoost (Extreme Gradient Boosting)
+- **Concept:** Sequential gradient boosting with second-order Taylor expansion and explicit tree-pruning penalties.
+- **Result:** Runner-up on Ames (R-squared: 0.9052, MAE: $15,433). Highly reliable and well-regularized.
+
+### 5. CatBoost (Ames Dataset Champion)
+- **Concept:** Gradient boosting designed specifically for categorical data. It converts categorical labels (neighborhoods, roof types, exterior materials) into target statistics dynamically during training, preventing prediction shifts.
+- **Result:** Champion on Ames Housing. Achieved the lowest cross-validation log-RMSE (0.11561) and lowest holdout MAE ($14,983).
+
+---
+
+## 4. Benchmark Results and Findings
+
+### Ames Housing Dataset (1,460 Samples, 81 Features)
+
+| Rank | Model Name | 5-Fold CV log-RMSE | Holdout R-squared | Holdout MAE (USD) | Status |
 | :---: | :--- | :---: | :---: | :---: | :--- |
-| 🥇 | **CatBoost (Tuned)** | **0.11561** | **90.94%** | **$14,983** | 🏆 **Production Champion** |
-| 🥈 | **XGBoost (Tuned)** | 0.12133 | 90.52% | $15,433 | Strong Regularization |
-| 🥉 | **LightGBM (Tuned)** | 0.12240 | 90.13% | $16,309 | Fast Histogram Boosting |
-| 4 | **Ridge Regression** | 0.13433 | 91.14% | $15,795 | Linear Baseline |
-| 5 | **Random Forest** | 0.13740 | 89.13% | $16,588 | Bagging Baseline |
+| 1 | **CatBoost (Tuned)** | **0.11561** | **0.9094** | **$14,983** | Production Model |
+| 2 | **XGBoost (Tuned)** | 0.12133 | 0.9052 | $15,433 | Runner-Up |
+| 3 | **LightGBM (Tuned)** | 0.12240 | 0.9013 | $16,309 | Strong Contender |
+| 4 | **Ridge Regression** | 0.13433 | 0.9114 | $15,795 | Linear Baseline |
+| 5 | **Random Forest** | 0.13740 | 0.8913 | $16,588 | Bagging Baseline |
 
----
+### Global Housing Dataset (200,000 Samples, 40 Cities)
 
-### 🌐 Global Housing Tournament (200,000 Properties, 40 International Cities)
-
-| Rank | Algorithm | 5-Fold CV log-RMSE | Holdout Accuracy ($R^2$) | Average Dollar Error (MAE) | Percentage Error |
+| Rank | Model Name | 5-Fold CV log-RMSE | Holdout R-squared | Holdout MAE (USD) | Holdout MAPE |
 | :---: | :--- | :---: | :---: | :---: | :---: |
-| 🥇 | **Random Forest (Tuned)** | **0.00877** | **99.99%** | **$2,600** | **0.4%** |
-| 🥈 | **CatBoost** | 0.00917 | 99.98% | $4,725 | 0.6% |
-| 🥉 | **XGBoost** | 0.00963 | 99.99% | $4,266 | 0.5% |
-| 4 | **LightGBM** | 0.00977 | 99.99% | $3,794 | 0.5% |
+| 1 | **Random Forest** | **0.00877** | **0.9999** | **$2,600** | **0.4%** |
+| 2 | **CatBoost** | 0.00917 | 0.9998 | $4,725 | 0.6% |
+| 3 | **XGBoost** | 0.00963 | 0.9999 | $4,266 | 0.5% |
+| 4 | **LightGBM** | 0.00977 | 0.9999 | $3,794 | 0.5% |
 
 ---
 
-## 🔍 Smart Feature Engineering: Giving AI Common Sense
+## 5. Feature Engineering Pipeline
 
-Raw data alone doesn't always reflect how humans evaluate homes. In `model/train.py`, we created **12 domain-specific engineered features**:
+Raw tabular features were transformed using domain-specific real estate logic in `model/train.py`:
 
 ```python
-# 1. Total Enclosed Footprint (Combines main floor + finished basement)
+# 1. Total Enclosed Footprint (Above-ground living space + finished basement)
 X['TotalFootprint'] = X['GrLivArea'] + X['TotalBsmtSF']
 
-# 2. Quality × Condition Multiplier (Captures non-linear maintenance impact)
+# 2. Quality and Condition Interaction (Build grade multiplied by upkeep rating)
 X['QualCondScore'] = X['OverallQual'] * X['OverallCond']
 
-# 3. Fractional Bathroom Count (Weights full baths vs half baths)
+# 3. Fractional Bathroom Count (Full baths weighted 1.0, half baths weighted 0.5)
 X['TotalBath'] = X['FullBath'] + 0.5 * X['HalfBath']
 
-# 4. Renovation Indicator (Flags whether a vintage home was modernized)
+# 4. Remodel Indicator (Flags whether a vintage home underwent modern renovation)
 X['IsRemodeled'] = (X['YearRemodAdd'] != X['YearBuilt']).astype(int)
 
 # 5. Room Density (Living space divided by total room count)
 X['LivAreaPerRoom'] = X['GrLivArea'] / X['TotRmsAbvGrd']
 ```
 
-These smart clues boosted our baseline linear $R^2$ accuracy from **86% to 91%**!
+These interaction terms improved linear model performance from an initial R-squared of 0.86 to over 0.91, giving the algorithms stronger structural signals.
 
 ---
 
-## ⚠️ Target Leakage: The "Cheating on the Test" Trap
+## 6. Target Leakage Prevention
 
-When training machine learning models, **Target Leakage** happens when a feature accidentally contains the answer to what you are trying to predict.
+In exploratory data analysis of the global dataset, columns such as `loan_amount` and `down_payment` showed correlation coefficients of 0.938 and 0.851 with sale price.
 
-In the 200,000-row Global dataset, the raw CSV contained columns named `loan_amount` and `down_payment`. Our correlation analysis revealed:
-- `loan_amount` had a **0.938 correlation** ($94\%$) with `price`.
-- `down_payment` had a **0.851 correlation** ($85\%$) with `price`.
+In real-world mortgage underwriting, loan amounts and down payments are calculated *after* a property is appraised, not before. Training a model on loan amounts would create artificial accuracy (target leakage) because the model would simply invert the loan-to-value ratio rather than appraising property features.
 
-### Why is this cheating?
-In the real world, a mortgage lender calculates your loan amount **after** the house price is already set! If an AI uses the loan amount to predict the price, it isn't actually appraising the house — it's just reading the bank's receipt.
-
-### The Fix (`--no-financial` Mode):
-In our production pipeline, we strictly purged `loan_amount` and `down_payment`. The AI is forced to predict prices honestly using only physical, architectural, and geographic facts (square footage, rooms, year, city, country, risk indices).
+To ensure production integrity:
+- All financing columns were permanently excluded from the production pipeline (`--no-financial` mode).
+- The models learn exclusively from intrinsic physical, structural, and geographic attributes.
 
 ---
 
-## 📁 Codebase Walkthrough: What Every File Does
-
-Here is an overview of the directory structure:
+## 7. Repository Structure
 
 ```
-terrapulse-ml/
-├── train.csv                          # Ames, Iowa historical sales (1,460 rows)
-├── test.csv                           # Ames test set for Kaggle benchmarks
-├── global_house_purchase_dataset.csv  # 200k global records across 13 countries
-├── houseML.ipynb                      # Jupyter notebook for exploratory data analysis
-├── requirements.txt                   # Python packages (scikit-learn, CatBoost, etc.)
-├── README.md                          # This comprehensive guide
+ames-home-prediction/
+├── train.csv                          # Ames historical sales data (1,460 rows)
+├── test.csv                           # Ames test dataset
+├── global_house_purchase_dataset.csv  # 200k global real estate records
+├── houseML.ipynb                      # Exploratory data analysis notebook
+├── requirements.txt                   # Project dependencies
+├── README.md                          # Documentation and project overview
 │
-├── model/                             # 🧠 MACHINE LEARNING BACKEND
-│   ├── train.py                       # Trains Ames 5-model tournament with Optuna
-│   ├── train_global.py                # Trains Global 200k tournament (leakage-free)
-│   ├── predict.py                     # Inference engine with waterfall attribution
-│   └── artifacts/                     # Trained weights & metadata
-│       ├── pipeline.joblib            # Champion CatBoost serialized pipeline (1MB)
-│       ├── global_pipeline_nofin_comp.joblib # Champion Random Forest pipeline (94MB)
-│       ├── feature_config.json        # Ames feature configuration & medians
-│       ├── neighborhood_stats.json    # Ames spatial price baselines
-│       ├── model_comparison_ames.json # Full benchmark tournament metrics
-│       └── model_comparison_global_nofin.json # Global benchmark metrics
+├── model/                             # Machine learning pipelines
+│   ├── train.py                       # Ames 5-model Optuna training script
+│   ├── train_global.py                # Global 200k training script
+│   ├── predict.py                     # Inference module with component attributions
+│   └── artifacts/                     # Serialized pipelines and statistical benchmarks
+│       ├── pipeline.joblib            # Trained CatBoost pipeline (1MB)
+│       ├── feature_config.json        # Feature metadata and column configurations
+│       ├── neighborhood_stats.json    # Neighborhood median and range benchmarks
+│       ├── neighborhood_defaults.json # Statistical median defaults per neighborhood
+│       └── model_comparison_ames.json # Full benchmark tournament metrics
 │
-├── data/                              # 🗺️ GEOSPATIAL DATA
-│   ├── ames_house_points.json         # 1,460 individual house coordinates & tiers
-│   └── neighborhoods.geojson          # Geographic boundaries
+├── data/                              # Geospatial data
+│   ├── ames_house_points.json         # 1,460 house point coordinates and specs
+│   └── neighborhoods.geojson          # Geographic polygon boundaries for Ames
 │
-└── app/                               # 💻 USER INTERFACE & WEB SERVER
-    ├── server.py                      # Flask backend server
+└── app/                               # Web interface
+    ├── server.py                      # Flask backend application
     ├── templates/
-    │   └── index.html                 # 3-Section interactive web interface
+    │   └── index.html                 # 3-section user interface
     └── static/
-        ├── css/style.css              # Clean dark-mode glassmorphic styling
-        └── js/app.js                  # Client-side map & reactive calculation engine
+        ├── css/style.css              # Application stylesheet
+        └── js/app.js                  # Map rendering, spatial resolver, client logic
 ```
 
 ---
 
-## 🚀 Step-by-Step Quickstart Guide
+## 8. Quickstart and Installation Guide
 
-### 1. Clone & Install Dependencies
+### Prerequisites
+- Python 3.10, 3.11, or 3.12
+- pip package manager
+
+### 1. Clone Repository and Install Dependencies
 ```bash
 git clone https://github.com/NONion15/terrapulse-ml.git
 cd terrapulse-ml
 pip install -r requirements.txt
 ```
 
-### 2. Start the Interactive Web Application
+### 2. Run the Application
 ```bash
 python app/server.py
 ```
-Open **[http://localhost:8000](http://localhost:8000)** in your browser!
+Open **http://localhost:8000** in your web browser.
 
-### 3. (Optional) Retrain the Machine Learning Models
-You can run the full 5-model tournament and Bayesian hyperparameter tuning anytime:
+### 3. (Optional) Retrain Models with Bayesian Optimization
 ```bash
-# Train Ames Housing Models (Takes ~2 minutes with Optuna)
+# Train Ames models with 5-fold cross-validation and Optuna tuning
 python model/train.py
 
-# Train Global 200k Models (Leakage-Free Property Mode)
+# Train Global models in leakage-free property mode
 python model/train_global.py --no-financial
 ```
 
 ---
 
-## 🎨 How the 3-Section Web App Works
+## 9. Web Application Features
 
-The application is structured into 3 distinct, uncluttered sections:
+The interface is structured into three clean sections:
 
-### 1. ⚡ Quick Number-Only Predictor (Section 1)
-- **Spacious Sliders & Inputs:** Adjust Quality (1-10), Living Area (sqft), Year Built, Bedrooms, Bathrooms, Garage, and Basement.
-- **Live Valuation Card:** Instantly updates price with dynamic ticker animation, 95% Confidence Interval, Price/SqFt rate, and monthly mortgage calculations.
-- **Archetype Presets:** 1-click presets for *🏰 Luxury Estate*, *🏡 Suburban Family*, *🏢 Starter Home*, and *🛠️ Value-Add*.
-
-### 2. 🗺️ Geospatial Dot Explorer (Section 2)
-- **House Dot Pointers:** Renders **1,460 individual house dots** across Ames, color-coded into 5 valuation tiers:
-  - 🟢 **Value Tier** (< $140K)
-  - 🔵 **Starter Tier** ($140K – $190K)
-  - 🟣 **Mid Tier** ($190K – $250K)
-  - 🟡 **Upper Tier** ($250K – $330K)
-  - 🔴 **Luxury Tier** (> $330K)
-- **Click & Hover:** Hover over any dot to view its price snapshot. Click any dot to open the side inspector and customize its specifications.
-- **Global Hubs:** Switch to Global mode to explore 40 international metropolitan cities.
-
-### 3. 📖 Machine Learning Guide (Section 3)
-- An on-page educational guide explaining ML concepts, algorithm comparisons, feature engineering, and valuation breakdowns without technical jargon.
-
-### 📄 Official Appraisal Report:
-- Generate a printable **Valuation Appraisal Certificate** complete with confidence intervals, structural specs, and a component value breakdown.
+1. **Property Valuation Calculator:** A clean numerical interface with input sliders for quality ratings, living space, vintage, room counts, garage size, and expandable advanced architectural specifications. Displays real-time valuations, 95% confidence bounds, value attribution waterfall breakdowns, multi-model consensus comparisons, and a 10-year equity forecast.
+2. **Geospatial Map Explorer:** Interactive Leaflet map displaying 1,460 individual Ames properties color-coded by valuation tier. Hovering over any dot displays detailed property specifications. Clicking any location on the map runs point-in-polygon resolution to dynamically load neighborhood statistical defaults and calculate live valuations.
+3. **Model Documentation:** An educational overview explaining the regression algorithms, evaluation scorecards, feature engineering techniques, and target leakage prevention.
+4. **Appraisal Certificate Generator:** Creates a printable valuation appraisal summary document with property specifications, component waterfall breakdown, and financing scenarios.
 
 ---
 
-## 📜 License & Credits
-- Built with **Python 3.12**, **Flask**, **CatBoost**, **Scikit-Learn**, **Leaflet.js**, and **Optuna**.
-- Created as an open-source educational project for Machine Learning in Real Estate.
+## License
+Open-source under standard MIT licensing terms.

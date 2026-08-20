@@ -146,14 +146,14 @@ def predict(features: dict) -> dict:
     scale = float(np.clip(scale, 0.7, 1.4))
 
     attribution = [
-        {"name": "📍 Location Baseline", "value": round(median_base), "delta": 0, "type": "base", "detail": f"Median for {neighborhood}"},
-        {"name": "💎 Quality & Finish Rating", "value": round(qual_delta * scale), "delta": round(qual_delta * scale), "type": "comp", "detail": f"Craftsmanship {int(qual)}/10"},
-        {"name": "📐 Above-Grade Living Footprint", "value": round(size_delta * scale), "delta": round(size_delta * scale), "type": "comp", "detail": f"{int(gr_liv):,} sq ft"},
-        {"name": "🏢 Basement Area & Finish", "value": round(bsmt_delta * scale), "delta": round(bsmt_delta * scale), "type": "comp", "detail": f"{int(bsmt):,} sq ft"},
-        {"name": "🚗 Garage Storage Capacity", "value": round(garage_delta * scale), "delta": round(garage_delta * scale), "type": "comp", "detail": f"{int(garage)} vehicles"},
-        {"name": "🏗️ Construction Vintage & Era", "value": round(age_delta * scale), "delta": round(age_delta * scale), "type": "comp", "detail": f"Built in {int(year)}"},
-        {"name": "🛁 Bathrooms & Amenities", "value": round(bath_delta * scale), "delta": round(bath_delta * scale), "type": "comp", "detail": f"{int(baths)} full baths"},
-        {"name": "🌳 Lot Size & Parcel Grounds", "value": round(lot_delta * scale), "delta": round(lot_delta * scale), "type": "comp", "detail": f"{int(lot):,} sq ft"}
+        {"name": "Location Baseline", "value": round(median_base), "delta": 0, "type": "base", "detail": f"Median for {neighborhood}"},
+        {"name": "Quality and Finish Rating", "value": round(qual_delta * scale), "delta": round(qual_delta * scale), "type": "comp", "detail": f"Craftsmanship {int(qual)}/10"},
+        {"name": "Above-Grade Living Footprint", "value": round(size_delta * scale), "delta": round(size_delta * scale), "type": "comp", "detail": f"{int(gr_liv):,} sq ft"},
+        {"name": "Basement Area and Finish", "value": round(bsmt_delta * scale), "delta": round(bsmt_delta * scale), "type": "comp", "detail": f"{int(bsmt):,} sq ft"},
+        {"name": "Garage Storage Capacity", "value": round(garage_delta * scale), "delta": round(garage_delta * scale), "type": "comp", "detail": f"{int(garage)} vehicles"},
+        {"name": "Construction Vintage and Era", "value": round(age_delta * scale), "delta": round(age_delta * scale), "type": "comp", "detail": f"Built in {int(year)}"},
+        {"name": "Bathrooms and Amenities", "value": round(bath_delta * scale), "delta": round(bath_delta * scale), "type": "comp", "detail": f"{int(baths)} full baths"},
+        {"name": "Lot Size and Grounds", "value": round(lot_delta * scale), "delta": round(lot_delta * scale), "type": "comp", "detail": f"{int(lot):,} sq ft"}
     ]
 
     mae = 14983  # Ames CatBoost holdout MAE
@@ -304,11 +304,11 @@ def predict_global(features: dict) -> dict:
 
     loc_label = f"{city}, {country}" if city else country
     attribution = [
-        {"name": "📍 Metropolitan Market Baseline", "value": round(median_base), "delta": 0, "type": "base", "detail": f"Benchmark for {loc_label}"},
-        {"name": "📐 Usable Property Footprint", "value": round(size_delta * scale), "delta": round(size_delta * scale), "type": "comp", "detail": f"{int(size):,} sq ft"},
-        {"name": "🚪 Room Count & Floorplan", "value": round(rooms_delta * scale), "delta": round(rooms_delta * scale), "type": "comp", "detail": f"{int(rooms)} rooms"},
-        {"name": "🛁 Bathroom Facilities", "value": round(baths_delta * scale), "delta": round(baths_delta * scale), "type": "comp", "detail": f"{int(baths)} bathrooms"},
-        {"name": "🏗️ Building Construction Era", "value": round(age_delta * scale), "delta": round(age_delta * scale), "type": "comp", "detail": f"Constructed in {int(year)}"}
+        {"name": "Metropolitan Market Baseline", "value": round(median_base), "delta": 0, "type": "base", "detail": f"Benchmark for {loc_label}"},
+        {"name": "Usable Property Footprint", "value": round(size_delta * scale), "delta": round(size_delta * scale), "type": "comp", "detail": f"{int(size):,} sq ft"},
+        {"name": "Room Count and Floorplan", "value": round(rooms_delta * scale), "delta": round(rooms_delta * scale), "type": "comp", "detail": f"{int(rooms)} rooms"},
+        {"name": "Bathroom Facilities", "value": round(baths_delta * scale), "delta": round(baths_delta * scale), "type": "comp", "detail": f"{int(baths)} bathrooms"},
+        {"name": "Building Construction Era", "value": round(age_delta * scale), "delta": round(age_delta * scale), "type": "comp", "detail": f"Constructed in {int(year)}"}
     ]
 
     mae = 2600  # Global RF holdout MAE

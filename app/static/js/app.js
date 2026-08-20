@@ -1,5 +1,5 @@
 /* ============================================================
-   Ames Home Prediction Project — Client Interaction Engine
+   Ames Home Prediction Project - Client Interaction Engine
    ============================================================ */
 
 // Map Viewport Constants
@@ -137,7 +137,7 @@ function setBasemap(type) {
     });
 }
 
-// Render 1,460 House Dots with Rich Hover Tooltips
+// Render 1,460 House Dots with Clean Tooltips
 function renderAmesHouseDots() {
     if (!AMES_HOUSES || !Array.isArray(AMES_HOUSES)) return;
 
@@ -151,21 +151,21 @@ function renderAmesHouseDots() {
             fillOpacity: 0.8,
         });
 
-        // Rich Detailed Hover Tooltip
+        // Clean Hover Tooltip (No Emojis)
         const tierName = (house.tier || 'mid').toUpperCase() + ' TIER';
         const tooltipHtml = `
             <div class="tooltip-card-header">
                 <span class="tooltip-price">$${house.price.toLocaleString()}</span>
                 <span class="tooltip-tier-pill" style="background: ${house.color}25; color: ${house.color}; border: 1px solid ${house.color}60;">${tierName}</span>
             </div>
-            <div class="tooltip-neigh">${getNeighborhoodFullName(house.neighborhood)} · Ames, IA</div>
+            <div class="tooltip-neigh">${getNeighborhoodFullName(house.neighborhood)}, Ames, IA</div>
             <div class="tooltip-specs-grid">
-                <div>📐 <strong>${house.GrLivArea.toLocaleString()}</strong> sqft living</div>
-                <div>🏢 <strong>${(house.TotalBsmtSF || 0).toLocaleString()}</strong> sqft bsmt</div>
-                <div>💎 Quality: <strong>${house.OverallQual}/10</strong> (Cond: ${house.OverallCond || 5}/10)</div>
-                <div>🏗️ Built: <strong>${house.YearBuilt}</strong></div>
-                <div>🛏️ <strong>${house.BedroomAbvGr}</strong> Beds · 🛁 <strong>${house.FullBath}</strong> Baths</div>
-                <div>🚗 Garage: <strong>${house.GarageCars || 0}</strong> Cars (${house.HouseStyle || '1Fam'})</div>
+                <div>Living Area: <strong>${house.GrLivArea.toLocaleString()}</strong> sqft</div>
+                <div>Basement: <strong>${(house.TotalBsmtSF || 0).toLocaleString()}</strong> sqft</div>
+                <div>Quality: <strong>${house.OverallQual}/10</strong> (Condition: ${house.OverallCond || 5}/10)</div>
+                <div>Year Built: <strong>${house.YearBuilt}</strong></div>
+                <div>Bedrooms: <strong>${house.BedroomAbvGr}</strong> | Baths: <strong>${house.FullBath}</strong></div>
+                <div>Garage: <strong>${house.GarageCars || 0}</strong> Cars (${house.HouseStyle || '1Fam'})</div>
             </div>
         `;
         marker.bindTooltip(tooltipHtml, { sticky: true, className: 'house-dot-tooltip' });
@@ -416,7 +416,7 @@ function updateMarketContextBanner() {
     if (stats) {
         document.getElementById('market-neigh-name').textContent = getNeighborhoodFullName(neigh);
         document.getElementById('market-median').textContent = `$${stats.median_price.toLocaleString()}`;
-        document.getElementById('market-range').textContent = `$${formatPrice(stats.min_price)} – $${formatPrice(stats.max_price)}`;
+        document.getElementById('market-range').textContent = `$${formatPrice(stats.min_price)} - $${formatPrice(stats.max_price)}`;
         document.getElementById('market-count').textContent = `${stats.count} Homes Sampled`;
     }
 }
@@ -425,7 +425,7 @@ async function runCalcPrediction() {
     const isGlobal = currentScope === 'global';
     const qual = Number(document.getElementById('calc-OverallQual')?.value || 7);
     const qualBadge = document.getElementById('calc-qual-badge');
-    if (qualBadge) qualBadge.textContent = `${qual} · ${getQualityLabel(qual)}`;
+    if (qualBadge) qualBadge.textContent = `${qual} - ${getQualityLabel(qual)}`;
 
     let payload = {};
     let endpoint = '/api/predict';
@@ -490,11 +490,11 @@ function renderCalculatorResult(result, payload, isGlobal) {
     const pricePerSqFt = sqft > 0 ? Math.round(price / sqft) : 0;
     document.getElementById('calc-sqft-rate').textContent = `$${pricePerSqFt} / sqft`;
 
-    const locLabel = isGlobal ? `${payload.city}, ${payload.country}` : `${getNeighborhoodFullName(payload.Neighborhood)} · Ames, IA`;
+    const locLabel = isGlobal ? `${payload.city}, ${payload.country}` : `${getNeighborhoodFullName(payload.Neighborhood)}, Ames, IA`;
     document.getElementById('calc-location-label').textContent = locLabel;
 
     // Model Tag
-    const modelTag = isGlobal ? 'Random Forest Machine Learning Model' : 'CatBoost Machine Learning Model';
+    const modelTag = isGlobal ? 'Random Forest Regressor' : 'CatBoost Regressor';
     document.getElementById('calc-model-badge').textContent = modelTag;
 
     // Median and Range
@@ -522,7 +522,7 @@ function renderCalculatorResult(result, payload, isGlobal) {
     // Financial Grid
     const confLower = result.confidence_lower ? `$${formatPrice(result.confidence_lower)}` : `$${formatPrice(price * 0.92)}`;
     const confUpper = result.confidence_upper ? `$${formatPrice(result.confidence_upper)}` : `$${formatPrice(price * 1.08)}`;
-    document.getElementById('calc-conf-interval').textContent = `${confLower} – ${confUpper}`;
+    document.getElementById('calc-conf-interval').textContent = `${confLower} - ${confUpper}`;
 
     const loan = price * 0.8;
     const monthlyRate = 0.065 / 12;
@@ -693,7 +693,7 @@ function closeInspector() {
 }
 
 function populateInspector(prop) {
-    const locText = prop.isGlobal ? `${prop.city}, ${prop.country}` : `${getNeighborhoodFullName(prop.neighborhood)} · Ames, IA`;
+    const locText = prop.isGlobal ? `${prop.city}, ${prop.country}` : `${getNeighborhoodFullName(prop.neighborhood)}, Ames, IA`;
     document.getElementById('insp-location').textContent = locText;
 
     const qual = prop.features.OverallQual || 7;
@@ -709,7 +709,7 @@ function populateInspector(prop) {
     document.getElementById('insp-KitchenQual').value = prop.features.KitchenQual || 'Gd';
     document.getElementById('insp-Fireplaces').value = prop.features.Fireplaces !== undefined ? prop.features.Fireplaces : 1;
 
-    document.getElementById('insp-model').textContent = prop.isGlobal ? 'Random Forest AI' : 'CatBoost AI';
+    document.getElementById('insp-model').textContent = prop.isGlobal ? 'Random Forest Model' : 'CatBoost Model';
 }
 
 function handleInspectorInput() {
@@ -806,10 +806,10 @@ function openAppraisalModal() {
     const modal = document.getElementById('appraisal-modal');
     const container = document.getElementById('appraisal-content');
     const price = Math.round(prop.price || prop.prediction || 225000);
-    const locationName = prop.isGlobal ? `${prop.city}, ${prop.country}` : `${getNeighborhoodFullName(prop.neighborhood || 'NAmes')} (Ames, IA)`;
+    const locationName = prop.isGlobal ? `${prop.city}, ${prop.country}` : `${getNeighborhoodFullName(prop.neighborhood || 'NAmes')}, Ames, IA`;
     const sqft = prop.features.GrLivArea || prop.features.property_size_sqft || 1800;
     const pricePerSqFt = sqft > 0 ? Math.round(price / sqft) : 0;
-    const modelTag = prop.isGlobal ? 'Random Forest (Global 200k Pipeline)' : 'CatBoost Regressor (Ames Pipeline)';
+    const modelTag = prop.isGlobal ? 'Random Forest Pipeline' : 'CatBoost Pipeline';
     const r2Score = prop.isGlobal ? '99.99%' : '90.94%';
     const confLower = prop.confidence_lower ? `$${prop.confidence_lower.toLocaleString()}` : `$${Math.round(price * 0.92).toLocaleString()}`;
     const confUpper = prop.confidence_upper ? `$${prop.confidence_upper.toLocaleString()}` : `$${Math.round(price * 1.08).toLocaleString()}`;
@@ -835,7 +835,7 @@ function openAppraisalModal() {
             <div class="appraisal-brand-header">
                 <div>
                     <h1 class="appraisal-title">Ames Home Prediction Project</h1>
-                    <div class="appraisal-meta-sub">Official Automated Real Estate Appraisal Report & Valuation Certificate</div>
+                    <div class="appraisal-meta-sub">Official Automated Real Estate Appraisal Report and Valuation Certificate</div>
                 </div>
                 <div class="appraisal-cert-box">
                     <span class="cert-code">PARCEL #AMES-${Math.floor(1000 + Math.random() * 9000)}</span>
@@ -847,7 +847,7 @@ function openAppraisalModal() {
                 <div>
                     <span class="appraisal-caption">ESTIMATED FAIR MARKET VALUE</span>
                     <div class="appraisal-big-price">$${price.toLocaleString()}</div>
-                    <div class="appraisal-range-text">95% Confidence Bounds: <strong>${confLower} – ${confUpper}</strong></div>
+                    <div class="appraisal-range-text">95% Confidence Bounds: <strong>${confLower} - ${confUpper}</strong></div>
                 </div>
                 <div class="appraisal-hero-stats">
                     <div>Price / SqFt: <strong>$${pricePerSqFt}</strong></div>
@@ -858,7 +858,7 @@ function openAppraisalModal() {
             </div>
 
             <div class="appraisal-section">
-                <h3>1. Property Characteristics & Specifications</h3>
+                <h3>1. Property Characteristics and Specifications</h3>
                 <table class="appraisal-table">
                     <tbody>
                         <tr>
@@ -867,7 +867,7 @@ function openAppraisalModal() {
                         </tr>
                         <tr>
                             <td><strong>Quality Rating</strong></td><td>${prop.features.OverallQual || 7} / 10</td>
-                            <td><strong>Vintage Year</strong></td><td>${prop.features.YearBuilt || prop.features.constructed_year || 2005}</td>
+                            <td><strong>Year Built</strong></td><td>${prop.features.YearBuilt || prop.features.constructed_year || 2005}</td>
                         </tr>
                         <tr>
                             <td><strong>Bedrooms</strong></td><td>${prop.features.BedroomAbvGr || prop.features.rooms || 3} Beds</td>
@@ -882,7 +882,7 @@ function openAppraisalModal() {
             </div>
 
             <div class="appraisal-section">
-                <h3>2. Econometric Valuation Decomposition</h3>
+                <h3>2. Valuation Decomposition</h3>
                 <table class="appraisal-table">
                     <thead><tr><th>Component</th><th>Detail</th><th style="text-align: right;">Impact</th></tr></thead>
                     <tbody>${attributionRows}</tbody>
@@ -890,7 +890,7 @@ function openAppraisalModal() {
             </div>
 
             <div class="appraisal-section">
-                <h3>3. Financing Scenario & 10-Year Growth Projection</h3>
+                <h3>3. Financing Scenario and 10-Year Growth Projection</h3>
                 <div class="appraisal-fin-grid">
                     <div class="appraisal-fin-card">
                         <span>20% Down Payment</span>
@@ -901,11 +901,11 @@ function openAppraisalModal() {
                         <strong>$${Math.round(price * 0.8 * 0.00632).toLocaleString()}/mo</strong>
                     </div>
                     <div class="appraisal-fin-card">
-                        <span>Est. Monthly Rent</span>
+                        <span>Estimated Monthly Rent</span>
                         <strong>$${Math.round(price * 0.0075).toLocaleString()}/mo</strong>
                     </div>
                     <div class="appraisal-fin-card">
-                        <span>10-Year Est. Value (4.5%)</span>
+                        <span>10-Year Estimated Value (4.5%)</span>
                         <strong style="color: var(--accent-emerald);">$${Math.round(price * Math.pow(1.045, 10)).toLocaleString()}</strong>
                     </div>
                 </div>
@@ -1046,7 +1046,7 @@ function getNeighborhoodFullName(code) {
         'Timber': 'Timberland',
         'IDOTRR': 'Iowa DOT / Rail',
         'ClearCr': 'Clear Creek',
-        'SWISU': 'South & West ISU',
+        'SWISU': 'South and West ISU',
         'Blmngtn': 'Bloomington Heights',
         'MeadowV': 'Meadow Village',
         'BrDale': 'Briardale',
@@ -1057,11 +1057,11 @@ function getNeighborhoodFullName(code) {
 }
 
 function getQualityLabel(rating) {
-    if (rating >= 9) return 'Luxury / Elite Craftsmanship';
-    if (rating >= 7) return 'Good / Modern Custom Build';
-    if (rating >= 5) return 'Average / Standard Spec';
-    if (rating >= 3) return 'Fair / Needs Updating';
-    return 'Poor / Major Renovation Needed';
+    if (rating >= 9) return 'Luxury Custom Build';
+    if (rating >= 7) return 'Good Modern Build';
+    if (rating >= 5) return 'Average Standard Spec';
+    if (rating >= 3) return 'Fair Quality';
+    return 'Poor Quality';
 }
 
 function formatPrice(price) {
