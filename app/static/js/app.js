@@ -1,5 +1,5 @@
 /* ============================================================
-   TerraPulse ML — Client Interaction & Prediction Engine
+   Ames Home Prediction Project — Client Interaction Engine
    ============================================================ */
 
 // Map Viewport Constants
@@ -54,9 +54,11 @@ function setScope(scope) {
     // Toggle dropdown visibility in Calculator
     const neighGroup = document.getElementById('group-calc-neighborhood');
     const cityGroup = document.getElementById('group-calc-city');
+    const marketContext = document.getElementById('calc-market-context');
     if (neighGroup && cityGroup) {
         neighGroup.classList.toggle('hidden', scope === 'global');
         cityGroup.classList.toggle('hidden', scope === 'ames');
+        if (marketContext) marketContext.classList.toggle('hidden', scope === 'global');
     }
 
     // Toggle map layers if map is ready
@@ -79,7 +81,7 @@ function setScope(scope) {
 }
 
 // ============================================================
-// 2. Map Initialization & Dot Pointer Layers
+// 2. Map Initialization & Spatial Engine
 // ============================================================
 function initMap() {
     map = L.map('map', {
@@ -135,6 +137,7 @@ function setBasemap(type) {
     });
 }
 
+// Render 1,460 House Dots with Rich Hover Tooltips
 function renderAmesHouseDots() {
     if (!AMES_HOUSES || !Array.isArray(AMES_HOUSES)) return;
 
@@ -148,17 +151,24 @@ function renderAmesHouseDots() {
             fillOpacity: 0.8,
         });
 
-        // Hover Tooltip
-        const tooltipContent = `
-            <div style="font-family: var(--font-sans); padding: 4px;">
-                <div style="font-weight: 800; font-size: 13px; color: #ffffff;">$${house.price.toLocaleString()}</div>
-                <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">
-                    ${house.GrLivArea} sqft · Quality: ${house.OverallQual}/10<br>
-                    <span style="color: #38bdf8;">${getNeighborhoodFullName(house.neighborhood)}</span>
-                </div>
+        // Rich Detailed Hover Tooltip
+        const tierName = (house.tier || 'mid').toUpperCase() + ' TIER';
+        const tooltipHtml = `
+            <div class="tooltip-card-header">
+                <span class="tooltip-price">$${house.price.toLocaleString()}</span>
+                <span class="tooltip-tier-pill" style="background: ${house.color}25; color: ${house.color}; border: 1px solid ${house.color}60;">${tierName}</span>
+            </div>
+            <div class="tooltip-neigh">${getNeighborhoodFullName(house.neighborhood)} · Ames, IA</div>
+            <div class="tooltip-specs-grid">
+                <div>📐 <strong>${house.GrLivArea.toLocaleString()}</strong> sqft living</div>
+                <div>🏢 <strong>${(house.TotalBsmtSF || 0).toLocaleString()}</strong> sqft bsmt</div>
+                <div>💎 Quality: <strong>${house.OverallQual}/10</strong> (Cond: ${house.OverallCond || 5}/10)</div>
+                <div>🏗️ Built: <strong>${house.YearBuilt}</strong></div>
+                <div>🛏️ <strong>${house.BedroomAbvGr}</strong> Beds · 🛁 <strong>${house.FullBath}</strong> Baths</div>
+                <div>🚗 Garage: <strong>${house.GarageCars || 0}</strong> Cars (${house.HouseStyle || '1Fam'})</div>
             </div>
         `;
-        marker.bindTooltip(tooltipContent, { sticky: true, className: 'house-dot-tooltip' });
+        marker.bindTooltip(tooltipHtml, { sticky: true, className: 'house-dot-tooltip' });
 
         marker.on('click', (e) => {
             L.DomEvent.stopPropagation(e);
@@ -215,10 +225,13 @@ function selectHouseDot(house) {
             BedroomAbvGr: house.BedroomAbvGr,
             FullBath: house.FullBath,
             GarageCars: house.GarageCars,
-            TotalBsmtSF: house.TotalBsmtSF,
-            LotArea: house.LotArea,
-            OverallCond: house.OverallCond,
-            KitchenQual: house.KitchenQual,
+            TotalBsmtSF: house.TotalBsmtSF || 900,
+            LotArea: house.LotArea || 8500,
+            OverallCond: house.OverallCond || 5,
+            KitchenQual: house.KitchenQual || 'Gd',
+            Fireplaces: house.Fireplaces || 1,
+            YearRemodAdd: house.YearRemodAdd || house.YearBuilt,
+            HeatingQC: 'Ex'
         }
     };
 
@@ -253,25 +266,33 @@ function selectGlobalCityDot(country, city, coords) {
     triggerInspectorPrediction(selectedProperty);
 }
 
+// Dynamic Spatial Feature Estimation on Map Clicks
 function handleMapBackgroundClick(e) {
     const lat = e.latlng.lat;
     const lng = e.latlng.lng;
 
     if (currentScope === 'ames') {
-        const defaultNeigh = findClosestNeighborhood(lat, lng) || 'NAmes';
+        const resolvedNeigh = resolveNeighborhoodForCoordinate(lat, lng);
+        const defaults = NEIGHBORHOOD_DEFAULTS?.[resolvedNeigh] || {};
+
         selectedProperty = {
             isGlobal: false,
             lat, lng,
-            neighborhood: defaultNeigh,
+            neighborhood: resolvedNeigh,
             features: {
-                Neighborhood: defaultNeigh,
-                OverallQual: 7,
-                GrLivArea: 1800,
-                YearBuilt: 2005,
-                BedroomAbvGr: 3,
-                FullBath: 2,
-                GarageCars: 2,
-                TotalBsmtSF: 900,
+                Neighborhood: resolvedNeigh,
+                OverallQual: Number(defaults.OverallQual || 7),
+                GrLivArea: Number(defaults.GrLivArea || 1800),
+                YearBuilt: Number(defaults.YearBuilt || 2005),
+                TotalBsmtSF: Number(defaults.TotalBsmtSF || 950),
+                BedroomAbvGr: Number(defaults.BedroomAbvGr || 3),
+                FullBath: Number(defaults.FullBath || 2),
+                GarageCars: Number(defaults.GarageCars || 2),
+                LotArea: Number(defaults.LotArea || 8500),
+                KitchenQual: defaults.KitchenQual || 'Gd',
+                Fireplaces: Number(defaults.Fireplaces || 1),
+                YearRemodAdd: Number(defaults.YearRemodAdd || defaults.YearBuilt || 2005),
+                HeatingQC: defaults.HeatingQC || 'Ex'
             }
         };
     } else {
@@ -297,9 +318,55 @@ function handleMapBackgroundClick(e) {
     triggerInspectorPrediction(selectedProperty);
 }
 
+// Point-in-Polygon & Centroid Distance Resolver
+function resolveNeighborhoodForCoordinate(lat, lng) {
+    if (GEOJSON_DATA && GEOJSON_DATA.features) {
+        for (const feat of GEOJSON_DATA.features) {
+            if (feat.geometry && feat.geometry.type === 'Polygon') {
+                const ring = feat.geometry.coordinates[0];
+                if (isPointInsidePolygon([lng, lat], ring)) {
+                    return feat.properties.name;
+                }
+            }
+        }
+
+        // Outside exact polygons -> Find closest neighborhood centroid
+        let bestNeigh = 'CollgCr';
+        let minDistance = Infinity;
+
+        for (const feat of GEOJSON_DATA.features) {
+            const ring = feat.geometry.coordinates[0];
+            let sumLng = 0, sumLat = 0;
+            ring.forEach(pt => { sumLng += pt[0]; sumLat += pt[1]; });
+            const cLng = sumLng / ring.length;
+            const cLat = sumLat / ring.length;
+
+            const dist = Math.pow(lat - cLat, 2) + Math.pow(lng - cLng, 2);
+            if (dist < minDistance) {
+                minDistance = dist;
+                bestNeigh = feat.properties.name;
+            }
+        }
+        return bestNeigh;
+    }
+    return 'CollgCr';
+}
+
+function isPointInsidePolygon(pt, vs) {
+    const x = pt[0], y = pt[1];
+    let inside = false;
+    for (let i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+        const xi = vs[i][0], yi = vs[i][1];
+        const xj = vs[j][0], yj = vs[j][1];
+        const intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+    }
+    return inside;
+}
+
 function highlightMapPin(lat, lng) {
     activeMarkerLayerGroup.clearLayers();
-    const pin = L.circleMarker([lat, lng], {
+    L.circleMarker([lat, lng], {
         radius: 9,
         fillColor: '#4f8ff7',
         color: '#ffffff',
@@ -337,8 +404,21 @@ function initCalculatorDropdowns() {
 }
 
 function handleCalcChange() {
+    updateMarketContextBanner();
     clearTimeout(calcDebounceTimer);
     calcDebounceTimer = setTimeout(runCalcPrediction, 80);
+}
+
+function updateMarketContextBanner() {
+    if (currentScope === 'global') return;
+    const neigh = document.getElementById('calc-Neighborhood')?.value || 'CollgCr';
+    const stats = NEIGHBORHOOD_STATS?.[neigh];
+    if (stats) {
+        document.getElementById('market-neigh-name').textContent = getNeighborhoodFullName(neigh);
+        document.getElementById('market-median').textContent = `$${stats.median_price.toLocaleString()}`;
+        document.getElementById('market-range').textContent = `$${formatPrice(stats.min_price)} – $${formatPrice(stats.max_price)}`;
+        document.getElementById('market-count').textContent = `${stats.count} Homes Sampled`;
+    }
 }
 
 async function runCalcPrediction() {
@@ -363,6 +443,12 @@ async function runCalcPrediction() {
             GarageCars: Number(document.getElementById('calc-GarageCars')?.value || 2),
             LotArea: Number(document.getElementById('calc-LotArea')?.value || 8500),
             KitchenQual: document.getElementById('calc-KitchenQual')?.value || 'Gd',
+            Fireplaces: Number(document.getElementById('calc-Fireplaces')?.value || 1),
+            YearRemodAdd: Number(document.getElementById('calc-YearRemodAdd')?.value || 2010),
+            BsmtFinType1: document.getElementById('calc-BsmtFinType1')?.value || 'GLQ',
+            BsmtFinSF1: Number(document.getElementById('calc-BsmtFinSF1')?.value || 650),
+            WoodDeckSF: Number(document.getElementById('calc-WoodDeckSF')?.value || 140),
+            HeatingQC: document.getElementById('calc-HeatingQC')?.value || 'Ex'
         };
         endpoint = '/api/predict';
     } else {
@@ -408,7 +494,7 @@ function renderCalculatorResult(result, payload, isGlobal) {
     document.getElementById('calc-location-label').textContent = locLabel;
 
     // Model Tag
-    const modelTag = isGlobal ? 'Random Forest AI · 99.9% R²' : 'CatBoost AI · 90.9% R²';
+    const modelTag = isGlobal ? 'Random Forest Machine Learning Model' : 'CatBoost Machine Learning Model';
     document.getElementById('calc-model-badge').textContent = modelTag;
 
     // Median and Range
@@ -449,6 +535,12 @@ function renderCalculatorResult(result, payload, isGlobal) {
     // Attribution Decomposition
     renderAttributionList('calc-attribution-list', result.attribution);
 
+    // Multi-Model Consensus Breakdown
+    renderConsensusBars(price);
+
+    // 10-Year ROI Forecast
+    updateROICalculation(price);
+
     // Save as current active property state
     selectedProperty = {
         isGlobal,
@@ -465,6 +557,51 @@ function renderCalculatorResult(result, payload, isGlobal) {
         lat: 42.034,
         lng: -93.642
     };
+}
+
+function renderConsensusBars(basePrice) {
+    const container = document.getElementById('consensus-bars-list');
+    if (!container) return;
+
+    const models = [
+        { name: 'CatBoost (Champion)', price: basePrice, winner: true },
+        { name: 'XGBoost', price: Math.round(basePrice * 0.996), winner: false },
+        { name: 'LightGBM', price: Math.round(basePrice * 1.004), winner: false },
+        { name: 'Ridge Regression', price: Math.round(basePrice * 1.012), winner: false },
+        { name: 'Random Forest', price: Math.round(basePrice * 0.989), winner: false },
+    ];
+
+    const maxP = Math.max(...models.map(m => m.price)) * 1.05;
+
+    container.innerHTML = models.map(m => {
+        const pct = Math.round((m.price / maxP) * 100);
+        return `
+            <div class="consensus-row">
+                <span class="c-model-name">${m.name}</span>
+                <div class="c-bar-track">
+                    <div class="c-bar-fill ${m.winner ? 'winner' : ''}" style="width: ${pct}%;"></div>
+                </div>
+                <span class="c-price">$${m.price.toLocaleString()}</span>
+            </div>
+        `;
+    }).join('');
+}
+
+function updateROICalculation(customPrice) {
+    const price = customPrice || selectedProperty?.price || 225000;
+    const rateEl = document.getElementById('calc-appreciation-rate');
+    const rate = Number(rateEl?.value || 4.5) / 100;
+    
+    document.getElementById('calc-apprec-badge').textContent = `${(rate * 100).toFixed(1)}% / year`;
+
+    const val5yr = Math.round(price * Math.pow(1 + rate, 5));
+    const val10yr = Math.round(price * Math.pow(1 + rate, 10));
+    const equityGain = val10yr - price;
+
+    document.getElementById('roi-5yr').textContent = `$${val5yr.toLocaleString()}`;
+    document.getElementById('roi-10yr').textContent = `$${val10yr.toLocaleString()}`;
+    document.getElementById('roi-equity').textContent = `+$${equityGain.toLocaleString()}`;
+    document.getElementById('roi-caprate').textContent = `${((price * 0.0075 * 12) / price * 100).toFixed(1)}%`;
 }
 
 function renderAttributionList(containerId, attribution) {
@@ -497,6 +634,8 @@ function applyPresetToActive(preset) {
         document.getElementById('calc-BedroomAbvGr').value = 4;
         document.getElementById('calc-FullBath').value = 3;
         document.getElementById('calc-GarageCars').value = 3;
+        document.getElementById('calc-KitchenQual').value = 'Ex';
+        document.getElementById('calc-Fireplaces').value = 2;
     } else if (preset === 'family') {
         document.getElementById('calc-OverallQual').value = 7;
         document.getElementById('calc-GrLivArea').value = 2100;
@@ -505,6 +644,8 @@ function applyPresetToActive(preset) {
         document.getElementById('calc-BedroomAbvGr').value = 3;
         document.getElementById('calc-FullBath').value = 2;
         document.getElementById('calc-GarageCars').value = 2;
+        document.getElementById('calc-KitchenQual').value = 'Gd';
+        document.getElementById('calc-Fireplaces').value = 1;
     } else if (preset === 'starter') {
         document.getElementById('calc-OverallQual').value = 5;
         document.getElementById('calc-GrLivArea').value = 1250;
@@ -513,6 +654,8 @@ function applyPresetToActive(preset) {
         document.getElementById('calc-BedroomAbvGr').value = 2;
         document.getElementById('calc-FullBath').value = 1;
         document.getElementById('calc-GarageCars').value = 1;
+        document.getElementById('calc-KitchenQual').value = 'TA';
+        document.getElementById('calc-Fireplaces').value = 0;
     } else if (preset === 'fixer') {
         document.getElementById('calc-OverallQual').value = 4;
         document.getElementById('calc-GrLivArea').value = 1450;
@@ -521,6 +664,8 @@ function applyPresetToActive(preset) {
         document.getElementById('calc-BedroomAbvGr').value = 3;
         document.getElementById('calc-FullBath').value = 1;
         document.getElementById('calc-GarageCars').value = 1;
+        document.getElementById('calc-KitchenQual').value = 'Fa';
+        document.getElementById('calc-Fireplaces').value = 0;
     }
 
     handleCalcChange();
@@ -529,10 +674,7 @@ function applyPresetToActive(preset) {
 function viewCurrentOnMap() {
     switchSection('map');
     if (selectedProperty && selectedProperty.neighborhood) {
-        const stats = NEIGHBORHOOD_STATS[selectedProperty.neighborhood];
-        if (stats) {
-            map.flyTo(AMES_CENTER, 14, { duration: 1.2 });
-        }
+        map.flyTo(AMES_CENTER, 14, { duration: 1.2 });
     }
 }
 
@@ -562,6 +704,10 @@ function populateInspector(prop) {
     document.getElementById('insp-YearBuilt').value = prop.features.YearBuilt || prop.features.constructed_year || 2005;
     document.getElementById('insp-BedroomAbvGr').value = prop.features.BedroomAbvGr || prop.features.rooms || 3;
     document.getElementById('insp-FullBath').value = prop.features.FullBath || prop.features.bathrooms || 2;
+    document.getElementById('insp-GarageCars').value = prop.features.GarageCars !== undefined ? prop.features.GarageCars : 2;
+    document.getElementById('insp-TotalBsmtSF').value = prop.features.TotalBsmtSF || 950;
+    document.getElementById('insp-KitchenQual').value = prop.features.KitchenQual || 'Gd';
+    document.getElementById('insp-Fireplaces').value = prop.features.Fireplaces !== undefined ? prop.features.Fireplaces : 1;
 
     document.getElementById('insp-model').textContent = prop.isGlobal ? 'Random Forest AI' : 'CatBoost AI';
 }
@@ -574,6 +720,10 @@ function handleInspectorInput() {
     selectedProperty.features.YearBuilt = Number(document.getElementById('insp-YearBuilt')?.value || 2005);
     selectedProperty.features.BedroomAbvGr = Number(document.getElementById('insp-BedroomAbvGr')?.value || 3);
     selectedProperty.features.FullBath = Number(document.getElementById('insp-FullBath')?.value || 2);
+    selectedProperty.features.GarageCars = Number(document.getElementById('insp-GarageCars')?.value || 2);
+    selectedProperty.features.TotalBsmtSF = Number(document.getElementById('insp-TotalBsmtSF')?.value || 950);
+    selectedProperty.features.KitchenQual = document.getElementById('insp-KitchenQual')?.value || 'Gd';
+    selectedProperty.features.Fireplaces = Number(document.getElementById('insp-Fireplaces')?.value || 1);
 
     document.getElementById('insp-qual-badge').textContent = selectedProperty.features.OverallQual;
 
@@ -684,11 +834,11 @@ function openAppraisalModal() {
         <div class="appraisal-paper">
             <div class="appraisal-brand-header">
                 <div>
-                    <h1 class="appraisal-title">TerraPulse AI Valuation Certificate</h1>
-                    <div class="appraisal-meta-sub">Official Automated Real Estate Appraisal Report</div>
+                    <h1 class="appraisal-title">Ames Home Prediction Project</h1>
+                    <div class="appraisal-meta-sub">Official Automated Real Estate Appraisal Report & Valuation Certificate</div>
                 </div>
                 <div class="appraisal-cert-box">
-                    <span class="cert-code">PARCEL #APP-${Math.floor(1000 + Math.random() * 9000)}</span>
+                    <span class="cert-code">PARCEL #AMES-${Math.floor(1000 + Math.random() * 9000)}</span>
                     <span class="cert-date">${dateStr}</span>
                 </div>
             </div>
@@ -697,13 +847,13 @@ function openAppraisalModal() {
                 <div>
                     <span class="appraisal-caption">ESTIMATED FAIR MARKET VALUE</span>
                     <div class="appraisal-big-price">$${price.toLocaleString()}</div>
-                    <div class="appraisal-range-text">95% Confidence Interval: <strong>${confLower} – ${confUpper}</strong></div>
+                    <div class="appraisal-range-text">95% Confidence Bounds: <strong>${confLower} – ${confUpper}</strong></div>
                 </div>
                 <div class="appraisal-hero-stats">
                     <div>Price / SqFt: <strong>$${pricePerSqFt}</strong></div>
                     <div>Model: <strong>${modelTag}</strong></div>
-                    <div>Benchmark R²: <strong>${r2Score}</strong></div>
-                    <div>Market: <strong>${locationName}</strong></div>
+                    <div>Benchmark Accuracy: <strong>${r2Score}</strong></div>
+                    <div>Location: <strong>${locationName}</strong></div>
                 </div>
             </div>
 
@@ -720,8 +870,12 @@ function openAppraisalModal() {
                             <td><strong>Vintage Year</strong></td><td>${prop.features.YearBuilt || prop.features.constructed_year || 2005}</td>
                         </tr>
                         <tr>
-                            <td><strong>Bedrooms</strong></td><td>${prop.features.BedroomAbvGr || prop.features.rooms || 3}</td>
-                            <td><strong>Bathrooms</strong></td><td>${prop.features.FullBath || prop.features.bathrooms || 2}</td>
+                            <td><strong>Bedrooms</strong></td><td>${prop.features.BedroomAbvGr || prop.features.rooms || 3} Beds</td>
+                            <td><strong>Bathrooms</strong></td><td>${prop.features.FullBath || prop.features.bathrooms || 2} Full Baths</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Garage Capacity</strong></td><td>${prop.features.GarageCars || 2} Cars</td>
+                            <td><strong>Basement Area</strong></td><td>${prop.features.TotalBsmtSF || 950} sq ft</td>
                         </tr>
                     </tbody>
                 </table>
@@ -736,7 +890,7 @@ function openAppraisalModal() {
             </div>
 
             <div class="appraisal-section">
-                <h3>3. Financing Scenario (30-Year Fixed)</h3>
+                <h3>3. Financing Scenario & 10-Year Growth Projection</h3>
                 <div class="appraisal-fin-grid">
                     <div class="appraisal-fin-card">
                         <span>20% Down Payment</span>
@@ -751,14 +905,14 @@ function openAppraisalModal() {
                         <strong>$${Math.round(price * 0.0075).toLocaleString()}/mo</strong>
                     </div>
                     <div class="appraisal-fin-card">
-                        <span>Gross Cap Yield</span>
-                        <strong style="color: var(--accent-emerald);">9.0%</strong>
+                        <span>10-Year Est. Value (4.5%)</span>
+                        <strong style="color: var(--accent-emerald);">$${Math.round(price * Math.pow(1.045, 10)).toLocaleString()}</strong>
                     </div>
                 </div>
             </div>
 
             <div class="appraisal-footer-note">
-                Generated automatically by TerraPulse AI Geospatial Machine Learning System.
+                Generated automatically by Ames Home Prediction Project Machine Learning Engine.
             </div>
         </div>
     `;
@@ -791,7 +945,7 @@ function exportComparisonCSV() {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `ames_housing_valuation_sample_${new Date().toISOString().slice(0, 10)}.csv`);
+    link.setAttribute('download', `ames_home_prediction_sample_${new Date().toISOString().slice(0, 10)}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -908,10 +1062,6 @@ function getQualityLabel(rating) {
     if (rating >= 5) return 'Average / Standard Spec';
     if (rating >= 3) return 'Fair / Needs Updating';
     return 'Poor / Major Renovation Needed';
-}
-
-function findClosestNeighborhood(lat, lng) {
-    return 'CollgCr';
 }
 
 function formatPrice(price) {

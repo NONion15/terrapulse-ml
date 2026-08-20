@@ -1,8 +1,8 @@
-# 🏡 TerraPulse ML — Intelligent Real Estate Valuation & Learning Guide
+# 🏡 Ames Home Prediction Project — Intelligent Real Estate Valuation & Learning Guide
 
 > **A beginner-friendly, comprehensive guide to Machine Learning, Regression Algorithms, and Real Estate Valuation.**
 
-Welcome to **TerraPulse ML**! This project is an end-to-end Machine Learning (ML) system that predicts residential property values. Whether you are a beginner taking your first steps into AI, a student preparing an assessment, or a developer exploring machine learning, this repository is designed to be **clear, educational, and easy to understand from scratch**.
+Welcome to the **Ames Home Prediction Project**! This project is an end-to-end Machine Learning (ML) system that predicts residential property values. Whether you are a beginner taking your first steps into AI, a student preparing an assessment, or a developer exploring machine learning, this repository is designed to be **clear, educational, and easy to understand from scratch**.
 
 ---
 
