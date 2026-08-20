@@ -1,0 +1,202 @@
+{
+  "Blmngtn": {
+    "count": 17,
+    "median_price": 191000,
+    "mean_price": 194870,
+    "min_price": 159895,
+    "max_price": 264561,
+    "std_price": 30393
+  },
+  "Blueste": {
+    "count": 2,
+    "median_price": 137500,
+    "mean_price": 137500,
+    "min_price": 124000,
+    "max_price": 151000,
+    "std_price": 19091
+  },
+  "BrDale": {
+    "count": 16,
+    "median_price": 106000,
+    "mean_price": 104493,
+    "min_price": 83000,
+    "max_price": 125000,
+    "std_price": 14330
+  },
+  "BrkSide": {
+    "count": 58,
+    "median_price": 124300,
+    "mean_price": 124834,
+    "min_price": 39300,
+    "max_price": 223500,
+    "std_price": 40348
+  },
+  "ClearCr": {
+    "count": 28,
+    "median_price": 200250,
+    "mean_price": 212565,
+    "min_price": 130000,
+    "max_price": 328000,
+    "std_price": 50231
+  },
+  "CollgCr": {
+    "count": 150,
+    "median_price": 197200,
+    "mean_price": 197965,
+    "min_price": 110000,
+    "max_price": 424870,
+    "std_price": 51403
+  },
+  "Crawfor": {
+    "count": 51,
+    "median_price": 200624,
+    "mean_price": 210624,
+    "min_price": 90350,
+    "max_price": 392500,
+    "std_price": 68866
+  },
+  "Edwards": {
+    "count": 100,
+    "median_price": 121750,
+    "mean_price": 128219,
+    "min_price": 58500,
+    "max_price": 320000,
+    "std_price": 43208
+  },
+  "Gilbert": {
+    "count": 79,
+    "median_price": 181000,
+    "mean_price": 192854,
+    "min_price": 141000,
+    "max_price": 377500,
+    "std_price": 35986
+  },
+  "IDOTRR": {
+    "count": 37,
+    "median_price": 103000,
+    "mean_price": 100123,
+    "min_price": 34900,
+    "max_price": 169500,
+    "std_price": 33376
+  },
+  "MeadowV": {
+    "count": 17,
+    "median_price": 88000,
+    "mean_price": 98576,
+    "min_price": 75000,
+    "max_price": 151400,
+    "std_price": 23491
+  },
+  "Mitchel": {
+    "count": 49,
+    "median_price": 153500,
+    "mean_price": 156270,
+    "min_price": 84500,
+    "max_price": 271000,
+    "std_price": 36486
+  },
+  "NAmes": {
+    "count": 225,
+    "median_price": 140000,
+    "mean_price": 145847,
+    "min_price": 87500,
+    "max_price": 345000,
+    "std_price": 33075
+  },
+  "NPkVill": {
+    "count": 9,
+    "median_price": 146000,
+    "mean_price": 142694,
+    "min_price": 127500,
+    "max_price": 155000,
+    "std_price": 9377
+  },
+  "NWAmes": {
+    "count": 73,
+    "median_price": 182900,
+    "mean_price": 189050,
+    "min_price": 82500,
+    "max_price": 299800,
+    "std_price": 37172
+  },
+  "NoRidge": {
+    "count": 41,
+    "median_price": 301500,
+    "mean_price": 335295,
+    "min_price": 190000,
+    "max_price": 755000,
+    "std_price": 121412
+  },
+  "NridgHt": {
+    "count": 77,
+    "median_price": 315000,
+    "mean_price": 316270,
+    "min_price": 154000,
+    "max_price": 611657,
+    "std_price": 96392
+  },
+  "OldTown": {
+    "count": 113,
+    "median_price": 119000,
+    "mean_price": 128225,
+    "min_price": 37900,
+    "max_price": 475000,
+    "std_price": 52650
+  },
+  "SWISU": {
+    "count": 25,
+    "median_price": 139500,
+    "mean_price": 142591,
+    "min_price": 60000,
+    "max_price": 200000,
+    "std_price": 32622
+  },
+  "Sawyer": {
+    "count": 74,
+    "median_price": 135000,
+    "mean_price": 136793,
+    "min_price": 62383,
+    "max_price": 190000,
+    "std_price": 22345
+  },
+  "SawyerW": {
+    "count": 59,
+    "median_price": 179900,
+    "mean_price": 186555,
+    "min_price": 76000,
+    "max_price": 320000,
+    "std_price": 55651
+  },
+  "Somerst": {
+    "count": 86,
+    "median_price": 225500,
+    "mean_price": 225379,
+    "min_price": 144152,
+    "max_price": 423000,
+    "std_price": 56177
+  },
+  "StoneBr": {
+    "count": 25,
+    "median_price": 278000,
+    "mean_price": 310499,
+    "min_price": 170000,
+    "max_price": 556581,
+    "std_price": 112969
+  },
+  "Timber": {
+    "count": 38,
+    "median_price": 228475,
+    "mean_price": 242247,
+    "min_price": 137500,
+    "max_price": 378500,
+    "std_price": 64845
+  },
+  "Veenker": {
+    "count": 11,
+    "median_price": 218000,
+    "mean_price": 238772,
+    "min_price": 162500,
+    "max_price": 385000,
+    "std_price": 72369
+  }
+}

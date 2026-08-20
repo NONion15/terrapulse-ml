@@ -1,0 +1,198 @@
+{
+  "features": {
+    "country": "categorical",
+    "city": "categorical",
+    "property_type": "categorical",
+    "furnishing_status": "categorical",
+    "property_size_sqft": "numeric",
+    "constructed_year": "numeric",
+    "previous_owners": "numeric",
+    "rooms": "numeric",
+    "bathrooms": "numeric",
+    "garage": "numeric",
+    "garden": "numeric",
+    "crime_cases_reported": "numeric",
+    "legal_cases_on_property": "numeric",
+    "satisfaction_score": "numeric",
+    "neighbourhood_rating": "numeric",
+    "connectivity_score": "numeric"
+  },
+  "categorical_values": {
+    "country": [
+      "Australia",
+      "Brazil",
+      "Canada",
+      "China",
+      "France",
+      "Germany",
+      "India",
+      "Japan",
+      "Singapore",
+      "South Africa",
+      "UAE",
+      "UK",
+      "USA"
+    ],
+    "city": [
+      "Abu Dhabi",
+      "Bangalore",
+      "Beijing",
+      "Berlin",
+      "Birmingham",
+      "Brisbane",
+      "Cape Town",
+      "Chennai",
+      "Chicago",
+      "Delhi",
+      "Dubai",
+      "Frankfurt",
+      "Houston",
+      "Hyderabad",
+      "Johannesburg",
+      "Kyoto",
+      "Liverpool",
+      "London",
+      "Los Angeles",
+      "Lyon",
+      "Manchester",
+      "Marseille",
+      "Melbourne",
+      "Montreal",
+      "Mumbai",
+      "Munich",
+      "New York",
+      "Osaka",
+      "Paris",
+      "Pune",
+      "Rio de Janeiro",
+      "San Francisco",
+      "Shanghai",
+      "Shenzhen",
+      "Singapore",
+      "Sydney",
+      "S\u00e3o Paulo",
+      "Tokyo",
+      "Toronto",
+      "Vancouver"
+    ],
+    "property_type": [
+      "Apartment",
+      "Farmhouse",
+      "Independent House",
+      "Studio",
+      "Townhouse",
+      "Villa"
+    ],
+    "furnishing_status": [
+      "Fully-Furnished",
+      "Semi-Furnished",
+      "Unfurnished"
+    ]
+  },
+  "numeric_ranges": {
+    "property_size_sqft": {
+      "min": 400.0,
+      "max": 6000.0,
+      "median": 3190.0,
+      "mean": 3195.63
+    },
+    "constructed_year": {
+      "min": 1960.0,
+      "max": 2023.0,
+      "median": 1991.0,
+      "mean": 1991.49
+    },
+    "previous_owners": {
+      "min": 0.0,
+      "max": 6.0,
+      "median": 3.0,
+      "mean": 3.0
+    },
+    "rooms": {
+      "min": 1.0,
+      "max": 8.0,
+      "median": 5.0,
+      "mean": 4.51
+    },
+    "bathrooms": {
+      "min": 1.0,
+      "max": 8.0,
+      "median": 2.0,
+      "mean": 2.76
+    },
+    "garage": {
+      "min": 0.0,
+      "max": 1.0,
+      "median": 0.0,
+      "mean": 0.5
+    },
+    "garden": {
+      "min": 0.0,
+      "max": 1.0,
+      "median": 1.0,
+      "mean": 0.5
+    },
+    "crime_cases_reported": {
+      "min": 0.0,
+      "max": 10.0,
+      "median": 1.0,
+      "mean": 1.23
+    },
+    "legal_cases_on_property": {
+      "min": 0.0,
+      "max": 1.0,
+      "median": 0.0,
+      "mean": 0.25
+    },
+    "satisfaction_score": {
+      "min": 1.0,
+      "max": 10.0,
+      "median": 5.0,
+      "mean": 5.5
+    },
+    "neighbourhood_rating": {
+      "min": 1.0,
+      "max": 10.0,
+      "median": 5.0,
+      "mean": 5.51
+    },
+    "connectivity_score": {
+      "min": 1.0,
+      "max": 10.0,
+      "median": 5.0,
+      "mean": 5.5
+    }
+  },
+  "model_info": {
+    "name": "RandomForest",
+    "mode": "property_only",
+    "cv_log_rmse": 0.00877,
+    "holdout_log_rmse": 0.00683,
+    "holdout_r2": 0.9999,
+    "holdout_mae": 2600.0,
+    "holdout_rmse": 3076.0,
+    "holdout_mape": 0.39,
+    "target_transform": "log1p",
+    "training_samples": 200000,
+    "n_features": 16,
+    "feature_columns": [
+      "country",
+      "city",
+      "property_type",
+      "furnishing_status",
+      "property_size_sqft",
+      "constructed_year",
+      "previous_owners",
+      "rooms",
+      "bathrooms",
+      "garage",
+      "garden",
+      "crime_cases_reported",
+      "legal_cases_on_property",
+      "satisfaction_score",
+      "neighbourhood_rating",
+      "connectivity_score"
+    ],
+    "financial_features_included": false
+  }
+}

@@ -1,0 +1,457 @@
+{
+  "countries": {
+    "Australia": {
+      "count": 15442,
+      "median_price": 1030112,
+      "mean_price": 1028264,
+      "min_price": 123623,
+      "max_price": 1924825
+    },
+    "Brazil": {
+      "count": 15397,
+      "median_price": 641065,
+      "mean_price": 640083,
+      "min_price": 75838,
+      "max_price": 1203161
+    },
+    "Canada": {
+      "count": 15401,
+      "median_price": 1111270,
+      "mean_price": 1112176,
+      "min_price": 137664,
+      "max_price": 2102863
+    },
+    "China": {
+      "count": 15536,
+      "median_price": 1216631,
+      "mean_price": 1219037,
+      "min_price": 149336,
+      "max_price": 2282320
+    },
+    "France": {
+      "count": 15628,
+      "median_price": 1347494,
+      "mean_price": 1343233,
+      "min_price": 163842,
+      "max_price": 2523371
+    },
+    "Germany": {
+      "count": 15408,
+      "median_price": 954924,
+      "mean_price": 958093,
+      "min_price": 116321,
+      "max_price": 1803663
+    },
+    "India": {
+      "count": 15357,
+      "median_price": 476407,
+      "mean_price": 477797,
+      "min_price": 56288,
+      "max_price": 904447
+    },
+    "Japan": {
+      "count": 15317,
+      "median_price": 1429745,
+      "mean_price": 1437474,
+      "min_price": 175735,
+      "max_price": 2703971
+    },
+    "Singapore": {
+      "count": 15278,
+      "median_price": 2226014,
+      "mean_price": 2239026,
+      "min_price": 275233,
+      "max_price": 4202732
+    },
+    "South Africa": {
+      "count": 15401,
+      "median_price": 570878,
+      "mean_price": 573335,
+      "min_price": 68096,
+      "max_price": 1083082
+    },
+    "UAE": {
+      "count": 15141,
+      "median_price": 1901821,
+      "mean_price": 1907339,
+      "min_price": 237071,
+      "max_price": 3603554
+    },
+    "UK": {
+      "count": 15413,
+      "median_price": 1283812,
+      "mean_price": 1281217,
+      "min_price": 155387,
+      "max_price": 2404003
+    },
+    "USA": {
+      "count": 15281,
+      "median_price": 1600616,
+      "mean_price": 1603145,
+      "min_price": 196114,
+      "max_price": 3003693
+    }
+  },
+  "cities": {
+    "Australia|Brisbane": {
+      "country": "Australia",
+      "city": "Brisbane",
+      "count": 5011,
+      "median_price": 1035331,
+      "mean_price": 1030550,
+      "min_price": 125614,
+      "max_price": 1923369
+    },
+    "Australia|Melbourne": {
+      "country": "Australia",
+      "city": "Melbourne",
+      "count": 5289,
+      "median_price": 1028403,
+      "mean_price": 1029489,
+      "min_price": 123623,
+      "max_price": 1924825
+    },
+    "Australia|Sydney": {
+      "country": "Australia",
+      "city": "Sydney",
+      "count": 5142,
+      "median_price": 1024809,
+      "mean_price": 1024775,
+      "min_price": 126061,
+      "max_price": 1923161
+    },
+    "Brazil|Rio de Janeiro": {
+      "country": "Brazil",
+      "city": "Rio de Janeiro",
+      "count": 7642,
+      "median_price": 643977,
+      "mean_price": 640146,
+      "min_price": 76875,
+      "max_price": 1203161
+    },
+    "Brazil|S\u00e3o Paulo": {
+      "country": "Brazil",
+      "city": "S\u00e3o Paulo",
+      "count": 7755,
+      "median_price": 638324,
+      "mean_price": 640020,
+      "min_price": 75838,
+      "max_price": 1202360
+    },
+    "Canada|Montreal": {
+      "country": "Canada",
+      "city": "Montreal",
+      "count": 5112,
+      "median_price": 1132343,
+      "mean_price": 1125411,
+      "min_price": 137920,
+      "max_price": 2102863
+    },
+    "Canada|Toronto": {
+      "country": "Canada",
+      "city": "Toronto",
+      "count": 5076,
+      "median_price": 1090466,
+      "mean_price": 1099354,
+      "min_price": 137664,
+      "max_price": 2102178
+    },
+    "Canada|Vancouver": {
+      "country": "Canada",
+      "city": "Vancouver",
+      "count": 5213,
+      "median_price": 1111246,
+      "mean_price": 1111683,
+      "min_price": 141180,
+      "max_price": 2102687
+    },
+    "China|Beijing": {
+      "country": "China",
+      "city": "Beijing",
+      "count": 5328,
+      "median_price": 1212702,
+      "mean_price": 1208371,
+      "min_price": 150277,
+      "max_price": 2281396
+    },
+    "China|Shanghai": {
+      "country": "China",
+      "city": "Shanghai",
+      "count": 5209,
+      "median_price": 1218562,
+      "mean_price": 1222812,
+      "min_price": 149969,
+      "max_price": 2280828
+    },
+    "China|Shenzhen": {
+      "country": "China",
+      "city": "Shenzhen",
+      "count": 4999,
+      "median_price": 1219299,
+      "mean_price": 1226473,
+      "min_price": 149336,
+      "max_price": 2282320
+    },
+    "France|Lyon": {
+      "country": "France",
+      "city": "Lyon",
+      "count": 5220,
+      "median_price": 1357467,
+      "mean_price": 1350318,
+      "min_price": 165479,
+      "max_price": 2523371
+    },
+    "France|Marseille": {
+      "country": "France",
+      "city": "Marseille",
+      "count": 5328,
+      "median_price": 1349450,
+      "mean_price": 1341114,
+      "min_price": 163842,
+      "max_price": 2520426
+    },
+    "France|Paris": {
+      "country": "France",
+      "city": "Paris",
+      "count": 5080,
+      "median_price": 1336407,
+      "mean_price": 1338177,
+      "min_price": 166042,
+      "max_price": 2522382
+    },
+    "Germany|Berlin": {
+      "country": "Germany",
+      "city": "Berlin",
+      "count": 5241,
+      "median_price": 946387,
+      "mean_price": 954565,
+      "min_price": 118392,
+      "max_price": 1803324
+    },
+    "Germany|Frankfurt": {
+      "country": "Germany",
+      "city": "Frankfurt",
+      "count": 5117,
+      "median_price": 969024,
+      "mean_price": 967251,
+      "min_price": 116321,
+      "max_price": 1802359
+    },
+    "Germany|Munich": {
+      "country": "Germany",
+      "city": "Munich",
+      "count": 5050,
+      "median_price": 951835,
+      "mean_price": 952474,
+      "min_price": 117968,
+      "max_price": 1803663
+    },
+    "India|Bangalore": {
+      "country": "India",
+      "city": "Bangalore",
+      "count": 2579,
+      "median_price": 478430,
+      "mean_price": 479126,
+      "min_price": 56331,
+      "max_price": 900232
+    },
+    "India|Chennai": {
+      "country": "India",
+      "city": "Chennai",
+      "count": 2510,
+      "median_price": 469381,
+      "mean_price": 477863,
+      "min_price": 57737,
+      "max_price": 901815
+    },
+    "India|Delhi": {
+      "country": "India",
+      "city": "Delhi",
+      "count": 2583,
+      "median_price": 478696,
+      "mean_price": 475063,
+      "min_price": 56288,
+      "max_price": 904447
+    },
+    "India|Hyderabad": {
+      "country": "India",
+      "city": "Hyderabad",
+      "count": 2571,
+      "median_price": 475422,
+      "mean_price": 477453,
+      "min_price": 57142,
+      "max_price": 904370
+    },
+    "India|Mumbai": {
+      "country": "India",
+      "city": "Mumbai",
+      "count": 2535,
+      "median_price": 482745,
+      "mean_price": 478138,
+      "min_price": 57982,
+      "max_price": 902260
+    },
+    "India|Pune": {
+      "country": "India",
+      "city": "Pune",
+      "count": 2579,
+      "median_price": 475110,
+      "mean_price": 479152,
+      "min_price": 56356,
+      "max_price": 902793
+    },
+    "Japan|Kyoto": {
+      "country": "Japan",
+      "city": "Kyoto",
+      "count": 5075,
+      "median_price": 1443702,
+      "mean_price": 1436167,
+      "min_price": 179092,
+      "max_price": 2703869
+    },
+    "Japan|Osaka": {
+      "country": "Japan",
+      "city": "Osaka",
+      "count": 5054,
+      "median_price": 1429820,
+      "mean_price": 1443429,
+      "min_price": 177805,
+      "max_price": 2701442
+    },
+    "Japan|Tokyo": {
+      "country": "Japan",
+      "city": "Tokyo",
+      "count": 5188,
+      "median_price": 1414459,
+      "mean_price": 1432953,
+      "min_price": 175735,
+      "max_price": 2703971
+    },
+    "Singapore|Singapore": {
+      "country": "Singapore",
+      "city": "Singapore",
+      "count": 15278,
+      "median_price": 2226014,
+      "mean_price": 2239026,
+      "min_price": 275233,
+      "max_price": 4202732
+    },
+    "South Africa|Cape Town": {
+      "country": "South Africa",
+      "city": "Cape Town",
+      "count": 7689,
+      "median_price": 573479,
+      "mean_price": 574449,
+      "min_price": 68532,
+      "max_price": 1083082
+    },
+    "South Africa|Johannesburg": {
+      "country": "South Africa",
+      "city": "Johannesburg",
+      "count": 7712,
+      "median_price": 565960,
+      "mean_price": 572224,
+      "min_price": 68096,
+      "max_price": 1082785
+    },
+    "UAE|Abu Dhabi": {
+      "country": "UAE",
+      "city": "Abu Dhabi",
+      "count": 7504,
+      "median_price": 1887179,
+      "mean_price": 1904692,
+      "min_price": 237071,
+      "max_price": 3603554
+    },
+    "UAE|Dubai": {
+      "country": "UAE",
+      "city": "Dubai",
+      "count": 7637,
+      "median_price": 1911180,
+      "mean_price": 1909940,
+      "min_price": 237786,
+      "max_price": 3602608
+    },
+    "UK|Birmingham": {
+      "country": "UK",
+      "city": "Birmingham",
+      "count": 3935,
+      "median_price": 1298492,
+      "mean_price": 1288312,
+      "min_price": 158155,
+      "max_price": 2404003
+    },
+    "UK|Liverpool": {
+      "country": "UK",
+      "city": "Liverpool",
+      "count": 3825,
+      "median_price": 1275165,
+      "mean_price": 1275775,
+      "min_price": 155387,
+      "max_price": 2402240
+    },
+    "UK|London": {
+      "country": "UK",
+      "city": "London",
+      "count": 3860,
+      "median_price": 1264843,
+      "mean_price": 1269911,
+      "min_price": 156911,
+      "max_price": 2401895
+    },
+    "UK|Manchester": {
+      "country": "UK",
+      "city": "Manchester",
+      "count": 3793,
+      "median_price": 1293467,
+      "mean_price": 1290851,
+      "min_price": 158771,
+      "max_price": 2403571
+    },
+    "USA|Chicago": {
+      "country": "USA",
+      "city": "Chicago",
+      "count": 3107,
+      "median_price": 1614801,
+      "mean_price": 1603763,
+      "min_price": 196114,
+      "max_price": 3002443
+    },
+    "USA|Houston": {
+      "country": "USA",
+      "city": "Houston",
+      "count": 2999,
+      "median_price": 1582417,
+      "mean_price": 1599699,
+      "min_price": 198525,
+      "max_price": 3001396
+    },
+    "USA|Los Angeles": {
+      "country": "USA",
+      "city": "Los Angeles",
+      "count": 3000,
+      "median_price": 1584200,
+      "mean_price": 1597129,
+      "min_price": 198366,
+      "max_price": 3001395
+    },
+    "USA|New York": {
+      "country": "USA",
+      "city": "New York",
+      "count": 3083,
+      "median_price": 1637101,
+      "mean_price": 1619402,
+      "min_price": 198116,
+      "max_price": 3002860
+    },
+    "USA|San Francisco": {
+      "country": "USA",
+      "city": "San Francisco",
+      "count": 3092,
+      "median_price": 1595596,
+      "mean_price": 1595494,
+      "min_price": 197100,
+      "max_price": 3003693
+    }
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "CollgCr", "full_name": "College Creek" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.648, 42.022], [-93.638, 42.022], [-93.638, 42.030], [-93.648, 42.030], [-93.648, 42.022]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Veenker", "full_name": "Veenker" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.670, 42.040], [-93.660, 42.040], [-93.660, 42.048], [-93.670, 42.048], [-93.670, 42.040]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Crawfor", "full_name": "Crawford" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.635, 42.018], [-93.625, 42.018], [-93.625, 42.026], [-93.635, 42.026], [-93.635, 42.018]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "NoRidge", "full_name": "Northridge" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.665, 42.055], [-93.655, 42.055], [-93.655, 42.063], [-93.665, 42.063], [-93.665, 42.055]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Mitchel", "full_name": "Mitchell" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.620, 42.008], [-93.610, 42.008], [-93.610, 42.016], [-93.620, 42.016], [-93.620, 42.008]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Somerst", "full_name": "Somerset" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.680, 42.050], [-93.670, 42.050], [-93.670, 42.058], [-93.680, 42.058], [-93.680, 42.050]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "NWAmes", "full_name": "Northwest Ames" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.660, 42.045], [-93.650, 42.045], [-93.650, 42.053], [-93.660, 42.053], [-93.660, 42.045]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "OldTown", "full_name": "Old Town" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.625, 42.026], [-93.615, 42.026], [-93.615, 42.034], [-93.625, 42.034], [-93.625, 42.026]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "BrkSide", "full_name": "Brookside" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.630, 42.024], [-93.620, 42.024], [-93.620, 42.032], [-93.630, 42.032], [-93.630, 42.024]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Sawyer", "full_name": "Sawyer" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.650, 42.035], [-93.640, 42.035], [-93.640, 42.043], [-93.650, 42.043], [-93.650, 42.035]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "NAmes", "full_name": "North Ames" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.645, 42.040], [-93.635, 42.040], [-93.635, 42.048], [-93.645, 42.048], [-93.645, 42.040]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Gilbert", "full_name": "Gilbert" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.650, 42.052], [-93.640, 42.052], [-93.640, 42.060], [-93.650, 42.060], [-93.650, 42.052]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "StoneBr", "full_name": "Stone Brook" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.675, 42.042], [-93.665, 42.042], [-93.665, 42.050], [-93.675, 42.050], [-93.675, 42.042]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "NridgHt", "full_name": "Northridge Heights" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.675, 42.055], [-93.665, 42.055], [-93.665, 42.063], [-93.675, 42.063], [-93.675, 42.055]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Edwards", "full_name": "Edwards" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.645, 42.018], [-93.635, 42.018], [-93.635, 42.026], [-93.645, 42.026], [-93.645, 42.018]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "SawyerW", "full_name": "Sawyer West" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.660, 42.035], [-93.650, 42.035], [-93.650, 42.043], [-93.660, 42.043], [-93.660, 42.035]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Timber", "full_name": "Timberland" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.680, 42.035], [-93.670, 42.035], [-93.670, 42.043], [-93.680, 42.043], [-93.680, 42.035]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "IDOTRR", "full_name": "Iowa DOT & Rail Road" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.620, 42.026], [-93.610, 42.026], [-93.610, 42.034], [-93.620, 42.034], [-93.620, 42.026]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "ClearCr", "full_name": "Clear Creek" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.660, 42.028], [-93.650, 42.028], [-93.650, 42.036], [-93.660, 42.036], [-93.660, 42.028]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "SWISU", "full_name": "South & West of ISU" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.650, 42.022], [-93.640, 42.022], [-93.640, 42.030], [-93.650, 42.030], [-93.650, 42.022]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Blmngtn", "full_name": "Bloomington Heights" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.685, 42.055], [-93.675, 42.055], [-93.675, 42.063], [-93.685, 42.063], [-93.685, 42.055]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "MeadowV", "full_name": "Meadow Village" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.610, 42.010], [-93.600, 42.010], [-93.600, 42.018], [-93.610, 42.018], [-93.610, 42.010]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "BrDale", "full_name": "Briardale" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.615, 42.018], [-93.605, 42.018], [-93.605, 42.026], [-93.615, 42.026], [-93.615, 42.018]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "NPkVill", "full_name": "Northpark Villa" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.655, 42.048], [-93.645, 42.048], [-93.645, 42.056], [-93.655, 42.056], [-93.655, 42.048]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Blueste", "full_name": "Bluestem" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.605, 42.018], [-93.595, 42.018], [-93.595, 42.026], [-93.605, 42.026], [-93.605, 42.018]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Greens", "full_name": "Greens" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.690, 42.050], [-93.680, 42.050], [-93.680, 42.058], [-93.690, 42.058], [-93.690, 42.050]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "GrnHill", "full_name": "Green Hills" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.690, 42.042], [-93.680, 42.042], [-93.680, 42.050], [-93.690, 42.050], [-93.690, 42.042]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Landmrk", "full_name": "Landmark" },
+      "geometry": { "type": "Polygon", "coordinates": [[[-93.640, 42.010], [-93.630, 42.010], [-93.630, 42.018], [-93.640, 42.018], [-93.640, 42.010]]] }
+    }
+  ]
+}

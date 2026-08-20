@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TerraPulse ML · Geospatial Real Estate & AI Valuation</title>
+    
+    <!-- Leaflet & Map Tiles -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Typography: Inter, Plus Jakarta Sans, JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div id="app">
+        <!-- Top Clean Navigation Bar -->
+        <header id="header">
+            <div class="header-brand" onclick="switchSection('calculator')">
+                <div class="brand-logo">
+                    <span class="pulse-dot"></span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                        <line x1="8" y1="2" x2="8" y2="18"></line>
+                        <line x1="16" y1="6" x2="16" y2="22"></line>
+                    </svg>
+                </div>
+                <div class="brand-info">
+                    <h1>TerraPulse<span class="brand-accent">.AI</span></h1>
+                    <span class="brand-sub">Real Estate Valuation Platform</span>
+                </div>
+            </div>
+
+            <!-- Main 3-Section Navigation Bar -->
+            <nav class="nav-sections" role="tablist">
+                <button class="nav-tab active" data-section="calculator" onclick="switchSection('calculator')">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+                        <line x1="8" y1="6" x2="16" y2="6"></line>
+                        <line x1="16" y1="14" x2="16" y2="18"></line>
+                        <path d="M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M8 18h.01M12 18h.01"></path>
+                    </svg>
+                    <span>⚡ Quick Predictor</span>
+                </button>
+                <button class="nav-tab" data-section="map" onclick="switchSection('map')">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                        <line x1="8" y1="2" x2="8" y2="18"></line>
+                        <line x1="16" y1="6" x2="16" y2="22"></line>
+                    </svg>
+                    <span>🗺️ Map Explorer</span>
+                </button>
+                <button class="nav-tab" data-section="docs" onclick="switchSection('docs')">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                    <span>📖 Documentation</span>
+                </button>
+            </nav>
+
+            <!-- Right Scope Switcher: Ames vs Global -->
+            <div class="header-actions">
+                <div class="scope-toggle" role="group">
+                    <button id="btn-scope-ames" class="scope-btn active" onclick="setScope('ames')" title="Ames, Iowa 1,460 Parcels">
+                        <span>Ames, IA</span>
+                        <span class="scope-pill">CatBoost 91%</span>
+                    </button>
+                    <button id="btn-scope-global" class="scope-btn" onclick="setScope('global')" title="40 Global Metropolitan Hubs">
+                        <span>Global 40-City</span>
+                        <span class="scope-pill global">RF 99.9%</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Viewport Sections -->
+        <main id="main-content">
+            
+            <!-- ============================================================
+                 SECTION 1: ⚡ Number-Only Clean Predictor
+                 ============================================================ -->
+            <section id="section-calculator" class="app-section active">
+                <div class="section-container">
+                    <div class="section-header-compact">
+                        <div>
+                            <h2>Real Estate Price Predictor</h2>
+                            <p>Adjust property specifications below for immediate machine learning valuation estimation.</p>
+                        </div>
+                        <div class="archetype-chips">
+                            <span class="chip-label">Presets:</span>
+                            <button class="preset-chip" onclick="applyPresetToActive('luxury')">🏰 Luxury Estate</button>
+                            <button class="preset-chip" onclick="applyPresetToActive('family')">🏡 Suburban Family</button>
+                            <button class="preset-chip" onclick="applyPresetToActive('starter')">🏢 Starter Home</button>
+                            <button class="preset-chip" onclick="applyPresetToActive('fixer')">🛠️ Value-Add</button>
+                        </div>
+                    </div>
+
+                    <div class="calc-grid">
+                        <!-- Left Form Controls -->
+                        <div class="calc-card form-card">
+                            <form id="calc-form" onsubmit="return false">
+                                
+                                <!-- Location Row -->
+                                <div class="form-row-2">
+                                    <div class="form-group" id="group-calc-neighborhood">
+                                        <label for="calc-Neighborhood">Neighborhood / Location</label>
+                                        <select id="calc-Neighborhood" class="form-select" onchange="handleCalcChange()"></select>
+                                    </div>
+                                    <div class="form-group hidden" id="group-calc-city">
+                                        <label for="calc-city">Global Metropolitan City</label>
+                                        <select id="calc-city" class="form-select" onchange="handleCalcChange()"></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="calc-YearBuilt">Construction Year</label>
+                                        <input type="number" id="calc-YearBuilt" class="form-input" value="2005" min="1900" max="2026" oninput="handleCalcChange()">
+                                    </div>
+                                </div>
+
+                                <!-- Quality Slider -->
+                                <div class="form-group">
+                                    <div class="label-with-badge">
+                                        <label for="calc-OverallQual">Material & Finish Quality Rating</label>
+                                        <span id="calc-qual-badge" class="badge-accent">7 · Good Quality</span>
+                                    </div>
+                                    <input type="range" id="calc-OverallQual" min="1" max="10" value="7" class="slider" oninput="handleCalcChange()">
+                                    <div class="slider-ticks">
+                                        <span>1 (Poor)</span><span>3</span><span>5 (Average)</span><span>7</span><span>10 (Luxury)</span>
+                                    </div>
+                                </div>
+
+                                <!-- Core Dimensions -->
+                                <div class="form-row-2">
+                                    <div class="form-group">
+                                        <label for="calc-GrLivArea">Living Footprint (sq ft)</label>
+                                        <div class="input-with-suffix">
+                                            <input type="number" id="calc-GrLivArea" class="form-input" value="1850" min="400" max="8000" step="25" oninput="handleCalcChange()">
+                                            <span class="input-suffix">sqft</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="calc-TotalBsmtSF">Basement Area (sq ft)</label>
+                                        <div class="input-with-suffix">
+                                            <input type="number" id="calc-TotalBsmtSF" class="form-input" value="950" min="0" max="4000" step="25" oninput="handleCalcChange()">
+                                            <span class="input-suffix">sqft</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Layout & Garage -->
+                                <div class="form-row-3">
+                                    <div class="form-group">
+                                        <label for="calc-BedroomAbvGr">Bedrooms</label>
+                                        <select id="calc-BedroomAbvGr" class="form-select" onchange="handleCalcChange()">
+                                            <option value="1">1 Bed</option>
+                                            <option value="2">2 Beds</option>
+                                            <option value="3" selected>3 Beds</option>
+                                            <option value="4">4 Beds</option>
+                                            <option value="5">5 Beds</option>
+                                            <option value="6">6+ Beds</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="calc-FullBath">Bathrooms</label>
+                                        <select id="calc-FullBath" class="form-select" onchange="handleCalcChange()">
+                                            <option value="1">1 Bath</option>
+                                            <option value="2" selected>2 Baths</option>
+                                            <option value="3">3 Baths</option>
+                                            <option value="4">4+ Baths</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="calc-GarageCars">Garage</label>
+                                        <select id="calc-GarageCars" class="form-select" onchange="handleCalcChange()">
+                                            <option value="0">None</option>
+                                            <option value="1">1 Car</option>
+                                            <option value="2" selected>2 Cars</option>
+                                            <option value="3">3 Cars</option>
+                                            <option value="4">4 Cars</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Secondary Attributes -->
+                                <div class="form-row-2">
+                                    <div class="form-group">
+                                        <label for="calc-LotArea">Lot Area (sq ft)</label>
+                                        <input type="number" id="calc-LotArea" class="form-input" value="8500" min="1000" max="50000" step="250" oninput="handleCalcChange()">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="calc-KitchenQual">Kitchen Grade</label>
+                                        <select id="calc-KitchenQual" class="form-select" onchange="handleCalcChange()">
+                                            <option value="Ex">Ex (Excellent / Chef)</option>
+                                            <option value="Gd" selected>Gd (Good / Modern)</option>
+                                            <option value="TA">TA (Typical / Standard)</option>
+                                            <option value="Fa">Fa (Fair / Dated)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Right Live Hero Valuation Card -->
+                        <div class="calc-card valuation-card">
+                            <div class="val-card-top">
+                                <span class="val-caption">ESTIMATED VALUATION</span>
+                                <span id="calc-model-badge" class="model-tag">CatBoost AI · 90.9% R²</span>
+                            </div>
+
+                            <div class="val-main-price-row">
+                                <div id="calc-price-display" class="val-big-price">$0</div>
+                                <div id="calc-trend-badge" class="trend-pill positive">+0.0% vs Med</div>
+                            </div>
+
+                            <div class="val-meta-row">
+                                <span id="calc-location-label">Northridge · Ames, IA</span>
+                                <span id="calc-sqft-rate" class="sqft-badge">$0 / sqft</span>
+                            </div>
+
+                            <!-- Range Bar -->
+                            <div class="val-range-section">
+                                <div class="val-range-bar-track">
+                                    <div id="calc-range-bar-fill" class="val-range-bar-fill"></div>
+                                    <div id="calc-range-marker" class="val-range-marker"></div>
+                                </div>
+                                <div class="val-range-labels">
+                                    <span id="calc-range-min">$110K</span>
+                                    <span id="calc-range-med">Market Median</span>
+                                    <span id="calc-range-max">$425K</span>
+                                </div>
+                            </div>
+
+                            <!-- Financial Summary Grid -->
+                            <div class="val-fin-grid">
+                                <div class="val-fin-item">
+                                    <span class="v-fin-label">95% Conf. Interval</span>
+                                    <strong id="calc-conf-interval">$0 – $0</strong>
+                                </div>
+                                <div class="val-fin-item">
+                                    <span class="v-fin-label">Est. Mortgage (30Y)</span>
+                                    <strong id="calc-est-mortgage">$0/mo</strong>
+                                </div>
+                                <div class="val-fin-item">
+                                    <span class="v-fin-label">Down Payment (20%)</span>
+                                    <strong id="calc-est-down">$0</strong>
+                                </div>
+                                <div class="val-fin-item">
+                                    <span class="v-fin-label">Est. Rental Yield</span>
+                                    <strong id="calc-est-rent" class="highlight-emerald">$0/mo</strong>
+                                </div>
+                            </div>
+
+                            <!-- Value Waterfall Decomposition -->
+                            <div class="val-attribution-box">
+                                <div class="attr-header">Value Decomposition Attribution</div>
+                                <div id="calc-attribution-list" class="attr-list">
+                                    <!-- Dynamic rows -->
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="val-card-actions">
+                                <button class="btn btn-primary" onclick="viewCurrentOnMap()">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                                        <line x1="8" y1="2" x2="8" y2="18"></line>
+                                        <line x1="16" y1="6" x2="16" y2="22"></line>
+                                    </svg>
+                                    <span>Explore on Map</span>
+                                </button>
+                                <button class="btn btn-glass" onclick="openAppraisalFromCalc()">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                    </svg>
+                                    <span>Appraisal Certificate</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ============================================================
+                 SECTION 2: 🗺️ Map-Based Selection & Dot Explorer
+                 ============================================================ -->
+            <section id="section-map" class="app-section">
+                <div class="map-layout">
+                    
+                    <!-- Map Canvas Area -->
+                    <div id="map-container">
+                        <div id="map"></div>
+
+                        <!-- Top Floating Controls (Search + Basemap Switcher) -->
+                        <div class="map-top-bar">
+                            <div class="map-search-box">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <input type="text" id="map-search-input" placeholder="Search Ames neighborhood or global city..." onkeyup="handleQuickJump(event)" autocomplete="off">
+                                <div id="quick-jump-results" class="quick-jump-dropdown hidden"></div>
+                            </div>
+
+                            <div class="basemap-selector">
+                                <button class="layer-btn active" data-layer="dark" onclick="setBasemap('dark')">Dark</button>
+                                <button class="layer-btn" data-layer="satellite" onclick="setBasemap('satellite')">Satellite</button>
+                                <button class="layer-btn" data-layer="light" onclick="setBasemap('light')">Light</button>
+                            </div>
+
+                            <button class="btn btn-glass btn-sm" onclick="clearAllMarkers()">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+                                <span>Reset Pins</span>
+                            </button>
+                        </div>
+
+                        <!-- Map Grouped Dot Legend -->
+                        <div id="map-legend" class="map-dot-legend">
+                            <div class="legend-title">House Valuation Tiers (Dots)</div>
+                            <div class="legend-items">
+                                <div class="legend-dot-item"><span class="color-dot tier-1"></span><span>< $140K (Value)</span></div>
+                                <div class="legend-dot-item"><span class="color-dot tier-2"></span><span>$140K – $190K (Starter)</span></div>
+                                <div class="legend-dot-item"><span class="color-dot tier-3"></span><span>$190K – $250K (Mid)</span></div>
+                                <div class="legend-dot-item"><span class="color-dot tier-4"></span><span>$250K – $330K (Upper)</span></div>
+                                <div class="legend-dot-item"><span class="color-dot tier-5"></span><span>> $330K (Luxury)</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Instruction Toast -->
+                        <div id="map-instructions" class="map-instruction-toast">
+                            <span class="pulse-icon">📍</span>
+                            <span>Click any house dot to inspect specs, or click anywhere on the map to evaluate a new parcel</span>
+                        </div>
+                    </div>
+
+                    <!-- Clean Compact Side Inspector Panel -->
+                    <div id="map-inspector" class="map-inspector-panel hidden">
+                        <div class="inspector-header">
+                            <div>
+                                <div class="inspector-badge-row">
+                                    <span id="insp-badge" class="parcel-badge">HOUSE #1</span>
+                                    <span id="insp-model" class="model-tag">CatBoost AI</span>
+                                </div>
+                                <h3 id="insp-location">Northridge · Ames, IA</h3>
+                            </div>
+                            <button class="btn-icon" onclick="closeInspector()" title="Close inspector">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            </button>
+                        </div>
+
+                        <!-- Price Ticker -->
+                        <div class="inspector-price-box">
+                            <span class="insp-price-caption">VALUATION ESTIMATE</span>
+                            <div id="insp-price" class="insp-big-price">$0</div>
+                            <div class="insp-meta-row">
+                                <span id="insp-sqft-rate">$0 / sqft</span>
+                                <span id="insp-trend-pill" class="trend-pill positive">+0% vs Med</span>
+                            </div>
+                        </div>
+
+                        <!-- Quick Sliders Form -->
+                        <div class="inspector-form-area">
+                            <div class="form-group">
+                                <div class="label-with-badge">
+                                    <label for="insp-OverallQual">Quality (1-10)</label>
+                                    <span id="insp-qual-badge" class="badge-accent">7</span>
+                                </div>
+                                <input type="range" id="insp-OverallQual" min="1" max="10" value="7" class="slider" oninput="handleInspectorInput()">
+                            </div>
+
+                            <div class="form-row-2">
+                                <div class="form-group">
+                                    <label for="insp-GrLivArea">Living Area (sqft)</label>
+                                    <input type="number" id="insp-GrLivArea" class="form-input" value="1800" oninput="handleInspectorInput()">
+                                </div>
+                                <div class="form-group">
+                                    <label for="insp-YearBuilt">Year Built</label>
+                                    <input type="number" id="insp-YearBuilt" class="form-input" value="2005" oninput="handleInspectorInput()">
+                                </div>
+                            </div>
+
+                            <div class="form-row-2">
+                                <div class="form-group">
+                                    <label for="insp-BedroomAbvGr">Bedrooms</label>
+                                    <select id="insp-BedroomAbvGr" class="form-select" onchange="handleInspectorInput()">
+                                        <option value="2">2 Beds</option>
+                                        <option value="3" selected>3 Beds</option>
+                                        <option value="4">4 Beds</option>
+                                        <option value="5">5 Beds</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="insp-FullBath">Bathrooms</label>
+                                    <select id="insp-FullBath" class="form-select" onchange="handleInspectorInput()">
+                                        <option value="1">1 Bath</option>
+                                        <option value="2" selected>2 Baths</option>
+                                        <option value="3">3 Baths</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mini Value Attribution -->
+                        <div class="inspector-attr-area">
+                            <div class="attr-header">Value Decomposition</div>
+                            <div id="insp-attribution-list" class="attr-list-compact"></div>
+                        </div>
+
+                        <!-- Inspector Actions -->
+                        <div class="inspector-actions">
+                            <button class="btn btn-primary btn-block" onclick="openAppraisalFromInspector()">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                                <span>Appraisal Certificate</span>
+                            </button>
+                            <button class="btn btn-ghost btn-sm" onclick="exportComparisonCSV()">Export CSV</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ============================================================
+                 SECTION 3: 📖 Model Documentation & Architecture Page
+                 ============================================================ -->
+            <section id="section-docs" class="app-section">
+                <div class="docs-layout">
+                    <!-- Docs Sidebar Navigation -->
+                    <aside class="docs-sidebar">
+                        <div class="docs-sidebar-header">
+                            <span>DOCUMENTATION</span>
+                        </div>
+                        <ul class="docs-nav-list">
+                            <li><a href="#doc-overview" class="docs-nav-link active" onclick="smoothScrollDoc('doc-overview')">1. System Overview</a></li>
+                            <li><a href="#doc-benchmarks" class="docs-nav-link" onclick="smoothScrollDoc('doc-benchmarks')">2. Model Benchmarks (5 Algorithms)</a></li>
+                            <li><a href="#doc-feature-engineering" class="docs-nav-link" onclick="smoothScrollDoc('doc-feature-engineering')">3. Feature Engineering</a></li>
+                            <li><a href="#doc-leakage" class="docs-nav-link" onclick="smoothScrollDoc('doc-leakage')">4. Target Leakage Prevention</a></li>
+                            <li><a href="#doc-geospatial" class="docs-nav-link" onclick="smoothScrollDoc('doc-geospatial')">5. Geospatial & Inference</a></li>
+                            <li><a href="#doc-api" class="docs-nav-link" onclick="smoothScrollDoc('doc-api')">6. REST API Reference</a></li>
+                        </ul>
+                    </aside>
+
+                    <!-- Docs Content Body -->
+                    <div class="docs-content">
+                        
+                        <!-- Chapter 1 -->
+                        <article id="doc-overview" class="doc-chapter">
+                            <span class="chapter-num">Chapter 1</span>
+                            <h2>System Overview & Pipeline Architecture</h2>
+                            <p>TerraPulse ML is a dual-scope, production-grade real estate valuation platform designed to predict residential property values with high precision across two independent scopes:</p>
+                            
+                            <div class="doc-cards-grid">
+                                <div class="doc-card">
+                                    <div class="doc-card-title">🇺🇸 Ames Housing Dataset</div>
+                                    <p>1,460 residential properties with 81 granular structural features (quality ratings, square footage tiers, basement finishes, garage capacity, vintage).</p>
+                                    <div class="doc-tag">Champion: CatBoost (Holdout R² = 0.9094)</div>
+                                </div>
+                                <div class="doc-card">
+                                    <div class="doc-card-title">🌐 Global Housing Dataset</div>
+                                    <p>200,000 transaction records spanning 13 countries and 40 international metropolitan markets.</p>
+                                    <div class="doc-tag">Champion: Random Forest (Holdout R² = 0.9999)</div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Chapter 2 -->
+                        <article id="doc-benchmarks" class="doc-chapter">
+                            <span class="chapter-num">Chapter 2</span>
+                            <h2>5-Candidate Model Benchmark Leaderboard</h2>
+                            <p>We rigorously evaluated 5 top-tier regression algorithms across 5-fold cross-validation and independent held-out test splits with Optuna Bayesian optimization:</p>
+                            
+                            <h3>Ames Dataset Benchmark (1,460 Samples)</h3>
+                            <table class="doc-table">
+                                <thead>
+                                    <tr>
+                                        <th>Model Candidate</th>
+                                        <th>5-Fold CV log-RMSE</th>
+                                        <th>Holdout R²</th>
+                                        <th>Holdout MAE</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="winner-row">
+                                        <td><strong>CatBoost (Tuned)</strong></td>
+                                        <td>0.11561</td>
+                                        <td><strong>0.9094</strong></td>
+                                        <td><strong>$14,983</strong></td>
+                                        <td><span class="table-chip winner">🥇 Production Champion</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>XGBoost (Tuned)</td>
+                                        <td>0.12133</td>
+                                        <td>0.9052</td>
+                                        <td>$15,433</td>
+                                        <td><span class="table-chip">🥈 2nd Place</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>LightGBM (Tuned)</td>
+                                        <td>0.12240</td>
+                                        <td>0.9013</td>
+                                        <td>$16,309</td>
+                                        <td><span class="table-chip">🥉 3rd Place</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ridge Regression</td>
+                                        <td>0.13433</td>
+                                        <td>0.9114</td>
+                                        <td>$15,795</td>
+                                        <td><span class="table-chip">Linear Baseline</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Random Forest</td>
+                                        <td>0.13740</td>
+                                        <td>0.8913</td>
+                                        <td>$16,588</td>
+                                        <td><span class="table-chip">Bagging Baseline</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h3>Global Dataset Benchmark (200,000 Samples, 40 Cities)</h3>
+                            <table class="doc-table">
+                                <thead>
+                                    <tr>
+                                        <th>Model Candidate</th>
+                                        <th>5-Fold CV log-RMSE</th>
+                                        <th>Holdout R²</th>
+                                        <th>Holdout MAE</th>
+                                        <th>Holdout MAPE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="winner-row">
+                                        <td><strong>Random Forest (Tuned)</strong></td>
+                                        <td>0.00877</td>
+                                        <td><strong>0.9999</strong></td>
+                                        <td><strong>$2,600</strong></td>
+                                        <td><strong>0.4%</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CatBoost</td>
+                                        <td>0.00917</td>
+                                        <td>0.9998</td>
+                                        <td>$4,725</td>
+                                        <td>0.6%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>XGBoost</td>
+                                        <td>0.00963</td>
+                                        <td>0.9999</td>
+                                        <td>$4,266</td>
+                                        <td>0.5%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>LightGBM</td>
+                                        <td>0.00977</td>
+                                        <td>0.9999</td>
+                                        <td>$3,794</td>
+                                        <td>0.5%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ridge Regression</td>
+                                        <td>0.13512</td>
+                                        <td>0.9721</td>
+                                        <td>$108,069</td>
+                                        <td>10.2%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </article>
+
+                        <!-- Chapter 3 -->
+                        <article id="doc-feature-engineering" class="doc-chapter">
+                            <span class="chapter-num">Chapter 3</span>
+                            <h2>Feature Engineering & Formulations</h2>
+                            <p>To maximize predictive power without overfitting, we implemented 12 domain-specific transformations:</p>
+                            <div class="code-block">
+<pre><code># Ames Feature Engineering Highlights:
+X['QualCondScore']  = X['OverallQual'] * X['OverallCond']       # Non-linear quality interaction
+X['TotalBath']      = X['FullBath'] + 0.5 * X['HalfBath']       # Fractional bathroom capacity
+X['TotalFootprint'] = X['GrLivArea'] + X['TotalBsmtSF']         # Total enclosed square footage
+X['GarageScore']    = X['GarageCars'] * X['GarageArea']         # Garage volume metric
+X['IsRemodeled']    = (X['YearRemodAdd'] != X['YearBuilt']).int # Renovation indicator
+X['LivAreaPerRoom'] = X['GrLivArea'] / X['TotRmsAbvGrd']        # Spatial room density</code></pre>
+                            </div>
+                        </article>
+
+                        <!-- Chapter 4 -->
+                        <article id="doc-leakage" class="doc-chapter">
+                            <span class="chapter-num">Chapter 4</span>
+                            <h2>Target Leakage Prevention Analysis</h2>
+                            <p>On the 200,000-row global dataset, correlation analysis identified significant data leakage in financial columns:</p>
+                            <ul>
+                                <li><code>loan_amount</code> ($r = 0.938$ with price)</li>
+                                <li><code>down_payment</code> ($r = 0.851$ with price)</li>
+                            </ul>
+                            <div class="doc-callout warning">
+                                <strong>Leakage Mitigation Protocol:</strong> In production mode (<code>--no-financial</code>), loan and down payment variables are strictly removed. The model learns exclusively from intrinsic structural, architectural, and spatial variables (square footage, rooms, country, city, build era, risk indices).
+                            </div>
+                        </article>
+
+                        <!-- Chapter 5 -->
+                        <article id="doc-geospatial" class="doc-chapter">
+                            <span class="chapter-num">Chapter 5</span>
+                            <h2>Geospatial Methodology & Dot Clustering</h2>
+                            <p>Rather than using coarse polygon bounding boxes, properties are indexed as high-resolution spatial point locations:</p>
+                            <ul>
+                                <li><strong>Ames Parcels:</strong> 1,460 verified house locations categorized into 5 distinct color-coded valuation tiers (Emerald, Sky, Indigo, Amber, Rose).</li>
+                                <li><strong>Global Hubs:</strong> 40 international metropolitan hubs with coordinate anchors across Europe, North America, Asia-Pacific, and the Middle East.</li>
+                            </ul>
+                        </article>
+
+                        <!-- Chapter 6 -->
+                        <article id="doc-api" class="doc-chapter">
+                            <span class="chapter-num">Chapter 6</span>
+                            <h2>REST API Reference & Integration</h2>
+                            <p>Unified REST endpoints supporting single-parcel estimation and auto-routing:</p>
+                            
+                            <h4>1. Predict Ames Parcel (<code>POST /api/predict</code>)</h4>
+                            <div class="code-block">
+<pre><code>curl -X POST http://localhost:8000/api/predict \
+  -H "Content-Type: application/json" \
+  -d '{"Neighborhood": "CollgCr", "OverallQual": 7, "GrLivArea": 1750, "YearBuilt": 2005}'</code></pre>
+                            </div>
+
+                            <h4>2. Predict Global Property (<code>POST /api/predict/global</code>)</h4>
+                            <div class="code-block">
+<pre><code>curl -X POST http://localhost:8000/api/predict/global \
+  -H "Content-Type: application/json" \
+  -d '{"country": "Germany", "city": "Berlin", "property_size_sqft": 1800, "rooms": 4}'</code></pre>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Official Valuation Appraisal Certificate Modal -->
+        <div id="appraisal-modal" class="modal-overlay hidden" onclick="closeAppraisalModal(event)">
+            <div class="modal-card modal-appraisal" onclick="event.stopPropagation()">
+                <div class="modal-header no-print">
+                    <div class="modal-title-group">
+                        <span class="appraisal-cert-badge">OFFICIAL VALUATION APPRAISAL</span>
+                        <h2>Real Estate Valuation Certificate</h2>
+                        <span class="modal-subtitle">Algorithmic Assessment & Structural Decomposition</span>
+                    </div>
+                    <div class="header-modal-btns">
+                        <button class="btn btn-primary" onclick="printAppraisalReport()" title="Print or save as PDF">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                            <span>Print / PDF</span>
+                        </button>
+                        <button class="btn-icon" onclick="closeAppraisalModal()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="appraisal-content" class="appraisal-sheet">
+                    <!-- Populated dynamically by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Injection -->
+    <script>
+        const AMES_HOUSES = {{ ames_house_points|safe }};
+        const FEATURE_CONFIG = {{ feature_config|safe }};
+        const NEIGHBORHOOD_STATS = {{ neighborhood_stats|safe }};
+        const NEIGHBORHOOD_DEFAULTS = {{ neighborhood_defaults|safe }};
+        const GLOBAL_CONFIG = {{ global_config|safe }};
+        const GLOBAL_STATS = {{ global_stats|safe }};
+        const GLOBAL_DEFAULTS = {{ global_defaults|safe }};
+        const CITY_COORDINATES = {{ city_coordinates|safe }};
+    </script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
