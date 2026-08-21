@@ -1,12 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/static/:path*",
-      "destination": "/app/static/:path*"
-    },
-    {
       "source": "/(.*)",
-      "destination": "/api/index.py"
+      "destination": "https://terrapulse-ml.onrender.com/$1"
     }
   ]
 }
