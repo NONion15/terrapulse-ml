@@ -1,13 +1,19 @@
 {
   "version": 2,
-  "rewrites": [
+  "builds": [
     {
-      "source": "/api/:path*",
-      "destination": "https://YOUR_BACKEND_URL/api/:path*"
+      "src": "api/index.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/app/static/$1"
     },
     {
-      "source": "/(.*)",
-      "destination": "https://YOUR_BACKEND_URL/$1"
+      "src": "/(.*)",
+      "dest": "/api/index.py"
     }
   ]
 }
