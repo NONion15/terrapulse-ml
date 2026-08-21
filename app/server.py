@@ -15,6 +15,12 @@ from pathlib import Path
 
 from flask import Flask, jsonify, render_template, request
 
+try:
+    from flask_cors import CORS
+    cors_available = True
+except ImportError:
+    cors_available = False
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
@@ -35,6 +41,9 @@ app = Flask(
     template_folder=str(Path(__file__).parent / "templates"),
     static_folder=str(Path(__file__).parent / "static"),
 )
+
+if cors_available:
+    CORS(app)
 
 GEOJSON_PATH = PROJECT_ROOT / "data" / "neighborhoods.geojson"
 
@@ -227,6 +236,12 @@ def api_model_comparison():
                 result[name] = json.load(f)
 
     return jsonify(result)
+
+
+@app.route("/healthz")
+@app.route("/api/health")
+def healthz():
+    return jsonify({"status": "healthy", "service": "terrapulse-ml"}), 200
 
 
 if __name__ == "__main__":

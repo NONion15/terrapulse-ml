@@ -1,3 +1,13 @@
+---
+title: Ames Real Estate ML Platform
+emoji: 🏢
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # Ames Home Prediction Project
 
 A machine learning project for residential real estate price estimation, built on the Ames, Iowa housing dataset with secondary validation on a 200,000-record international dataset.

@@ -1,0 +1,31 @@
+name: Sync to Hugging Face Spaces
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  sync-to-hub:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Push to Hugging Face
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE: ${{ secrets.HF_SPACE_NAME }}
+        run: |
+          if [ -n "$HF_TOKEN" ] && [ -n "$HF_SPACE" ]; then
+            git config --global user.email "ci@terrapulse.ml"
+            git config --global user.name "CI Deployment Bot"
+            git remote add space "https://user:$HF_TOKEN@huggingface.co/spaces/$HF_SPACE"
+            git push --force space main
+            echo "Successfully pushed latest changes to Hugging Face Space: $HF_SPACE"
+          else
+            echo "HF_TOKEN or HF_SPACE_NAME not configured in GitHub Secrets yet. Skipping auto-sync."
+          fi
