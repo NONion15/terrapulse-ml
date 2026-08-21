@@ -1,4 +1,7 @@
 {
+  "framework": null,
+  "buildCommand": "echo 'Static CDN and Reverse Proxy ready'",
+  "outputDirectory": ".",
   "rewrites": [
     {
       "source": "/(.*)",
